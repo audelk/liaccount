@@ -1,0 +1,201 @@
+<div style="height: calc(100vh - 125px);">
+    <div fxLayout="row" fxLayoutWrap="wrap">
+        <div *ngIf="loadingItems" class="m-1" fxFlex="100">
+            <mat-progress-bar mode="indeterminate" class="session-progress"></mat-progress-bar>
+        </div>
+
+        <div fxFlex="100" fxFlex.gt-sm="80" fxFlex.gt-md="calc(100% - 300px)">
+
+            <mat-card class="p-0 ">
+                <mat-card-content class="p-0">
+                    <div class="search-bar ">
+
+                        <form class="top-search-form mat-box-shadow" style="margin-right: 25px;display:inline-block;width:500px">
+                            <mat-icon role="img">search</mat-icon>
+                            <input autofocus="true" placeholder="Search connection by name,company,occupation or location" type="text" (keyup)='updateFilter($event)'>
+
+                        </form>
+                        <mat-form-field [floatLabel]="'never'" style="float:right;margin-right:10px">
+                            <mat-select placeholder="Status" [(value)]="statusFiltersSelected" (selectionChange)="onStatusFilterChange($event)">
+                                <mat-option *ngFor="let status of statusFilters" [value]="status.value">
+                                    {{status.viewValue}}
+                                </mat-option>
+                            </mat-select>
+                            <mat-label>
+                                <mat-icon>markunread</mat-icon>
+                            </mat-label>
+                        </mat-form-field>
+
+
+                    </div>
+                    <div class="full-width" style="clear: both;"></div>
+                    <ngx-datatable [selected]="selected" [selectionType]="'checkbox'" [selectAllRowsOnPage]="false" (activate)="onActivate($event)" (select)='onSelect($event)' #table class="material ml-0 mr-0" [rows]="items" [columnMode]="'force'" [headerHeight]="50" [footerHeight]="50"
+                        [limit]="10" [rowHeight]="'auto'">
+
+
+                        <ngx-datatable-column [cellClass]="getCellClass" name="Name" [flexGrow]="1">
+                            <ng-template let-row="row" ngx-datatable-cell-template>
+                                <a class="toolbar-avatar md mr-1"><img src="{{row.picture || userSvc.noPicture}}" alt=""></a>
+
+                                {{ (row.firstName + ' ' + row.lastName )==" "? row?.formattedName : (row.firstName + ' ' + row.lastName ) }}
+
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-column [cellClass]="getCellClass" name="Occupation" [flexGrow]="1" prop="title">
+                            <ng-template let-row="row" ngx-datatable-cell-template>
+                                {{ row?.occupation || row?.title }}
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-column [cellClass]="getCellClass" name="Company" [flexGrow]="1">
+                            <ng-template let-row="row" ngx-datatable-cell-template>
+                                {{ row?.industry || row?.company }}
+                            </ng-template>
+                        </ngx-datatable-column>
+                        <ngx-datatable-column [cellClass]="getCellClass" name="Location" [flexGrow]="1" prop="location">
+                            <ng-template let-row="row" ngx-datatable-cell-template>
+                                {{ row?.location }}
+                            </ng-template>
+                        </ngx-datatable-column>
+                        <ngx-datatable-column [cellClass]="getCellClass" name="Date" [canAutoResize]="false" [width]="130" prop="latest_activity">
+                            <ng-template let-row="row" ngx-datatable-cell-template>
+                                {{ row?.latest_activity | date:'dd-MM-yyyy @ HH:mm' }}
+                            </ng-template>
+                        </ngx-datatable-column>
+                        <ngx-datatable-column name="Star" [canAutoResize]="false" [width]="130" prop="star">
+
+                            <ng-template let-row="row" ngx-datatable-cell-template>
+                                <div class="full-width">
+                                    <button matTooltip="Star" matTooltipPosition="before" class="mat-flat-button" [matMenuTriggerFor]="userMenu">
+                    <span *ngIf="row.star==0 || row.star==undefined"><mat-icon class="">star_border</mat-icon></span>
+                    <span *ngIf="row.star==1"><mat-icon class="mat-color-accent">star</mat-icon></span>
+                    <span *ngIf="row.star==2"><mat-icon class="mat-color-accent">star</mat-icon><mat-icon class="mat-color-accent">star</mat-icon></span>
+                    <span *ngIf="row.star==3"><mat-icon class="mat-color-accent">star</mat-icon><mat-icon class="mat-color-accent">star</mat-icon><mat-icon class="mat-color-accent">star</mat-icon></span>
+          </button> </div>
+                                <mat-menu #userMenu="matMenu">
+                                    <button matTooltip="" mat-menu-item (click)="setStar(row,0)"><mat-icon >star_border</mat-icon></button>
+                                    <button matTooltip="" mat-menu-item (click)="setStar(row,1)"><mat-icon class="mat-color-accent">star</mat-icon></button>
+                                    <button matTooltip="" mat-menu-item (click)="setStar(row,2)"><mat-icon class="mat-color-accent">star</mat-icon><mat-icon class="mat-color-accent">star</mat-icon></button>
+                                    <button matTooltip="" mat-menu-item (click)="setStar(row,3)"><mat-icon class="mat-color-accent">star</mat-icon><mat-icon class="mat-color-accent">star</mat-icon><mat-icon class="mat-color-accent">star</mat-icon></button>
+                                    <button matTooltip="" mat-menu-item (click)="setStar(row,-1)">Cancel</button>
+                                </mat-menu>
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-column *ngIf="spreadSheetStatus!=false" [name]="'To CRM'" [width]="80" [sortable]="false" [canAutoResize]="false" [draggable]="false" [resizeable]="false">
+
+                            <ng-template ngx-datatable-cell-template let-row="row" let-value="value" let-isSelected="isSelected" let-onCheckboxChangeFn="onCheckboxChangeFn">
+
+                                <mat-checkbox *ngIf="row.ex_to_sheet==0" [checked]="isSelected" (change)="onCheckboxChangeFn($event)"></mat-checkbox>
+                            </ng-template>
+                        </ngx-datatable-column>
+
+                    </ngx-datatable>
+                </mat-card-content>
+            </mat-card>
+        </div>
+
+        <div fxFlex="100" fxFlex.gt-sm="20" fxFlex.gt-md="300px">
+
+            <mat-card class="p-0" style="position: -webkit-sticky;position: sticky;top: 3px;">
+                <mat-sidenav-container class="chat-container">
+                    <!-- Left sidebar -->
+
+
+                    <!-- Right side -->
+                    <div class="chats-wrap">
+                        <!-- Right side topbar -->
+                        <mat-progress-bar mode="indeterminate" *ngIf='chatLoading'></mat-progress-bar>
+                        <mat-toolbar color="primary" class="chat-toolbar mb-1">
+
+
+                            <!-- Selected active user -->
+                            <div class="active-chat-user" fxLayout="row" fxLayoutAlign="start center">
+
+                                <div *ngIf="!currentCon" fxLayout="column">
+                                    <h6 class="m-0 font-normal fz-1">Messenger</h6>
+
+                                </div>
+                                <a *ngIf="currentCon" class="toolbar-avatar mr-1">
+                                    <img [src]="currentCon.picture" alt="">
+
+                                </a>
+                                <div fxLayout="column" *ngIf="currentCon.firstName!=undefined">
+                                    <h6 class="m-0 font-normal fz-1">{{currentCon.firstName + ' '+ currentCon.lastName}}</h6>
+                                </div>
+                            </div>
+
+
+                            <!-- Right side top menu -->
+                            <span fxFlex></span>
+
+                        </mat-toolbar>
+
+                        <!-- Main chat body -->
+                        <div class="conversations-hold">
+
+                            <!-- single chat item -->
+                            <div *ngFor="let msg of chatMessages">
+                                <div class="single-conversation sender" *ngIf="msg.sender=='Me'" fxLayout="row">
+                                    <div>
+                                        <h5 class="chat-username text-muted">Me</h5>
+                                        <div class="conversation-msg">
+                                            {{msg.text}}
+                                        </div>
+                                        <p class="chat-date text-muted">{{(msg.createdAt ) |date:'short'}}</p>
+                                    </div>
+                                </div>
+                                <div class="single-conversation me" *ngIf="msg.sender=='To'" fxLayout="row">
+                                    <div>
+
+                                        <h5 class="chat-username text-muted">{{currentCon.firstName + ' '+currentCon.lastName}}</h5>
+                                        <div class="conversation-msg">
+                                            {{msg.text}}
+                                        </div>
+                                        <p class="chat-date text-muted">{{(msg.createdAt ) |date:'short'}}</p>
+                                    </div>
+                                </div>
+                                <div class="single-conversation me" *ngIf="msg.sender=='In'" fxLayout="row">
+                                    <div>
+                                        <h5 class="chat-username text-muted text-sm mat-color-primary">{{currentCon.firstName + ' '+currentCon.lastName}} is now connected</h5>
+
+                                        <p class="chat-date text-muted mat-color-primary">{{(msg.createdAt ) |date:'short'}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <mat-divider></mat-divider>
+
+                        <!-- Input box and send button -->
+                        <div class="chat-input-actions" fxLayout="row">
+                            <mat-form-field class="full-width mr-1">
+
+                                <textarea matTextareaAutosize matAutosizeMinRows="2" matAutosizeMaxRows="15" matInput [(ngModel)]="msgToSend" placeholder="Type your message">
+             </textarea>
+                            </mat-form-field>
+                            <button mat-fab color="primary" (click)="msgSend()"><mat-icon>send</mat-icon></button>
+                        </div>
+
+                    </div>
+                </mat-sidenav-container>
+                <mat-divider></mat-divider>
+                <mat-list>
+                    <mat-list-item *ngIf="currentCon.publicIdentifier">
+                        <mat-icon>link</mat-icon>&nbsp;<a href="{{userSvc.inProfileRoot + currentCon.publicIdentifier}}" target="_blank">{{userSvc.inProfileRoot + currentCon.publicIdentifier}}</a></mat-list-item>
+
+                    <mat-list-item>
+                        <mat-icon>group_add</mat-icon>&nbsp;{{contactInfo.connectedAt | date }} </mat-list-item>
+                    <mat-list-item>
+                        <mat-icon>email</mat-icon>&nbsp;{{contactInfo.emailAddress}} </mat-list-item>
+                    <mat-list-item *ngFor="let item of contactInfo.websites">
+                        <mat-icon>bookmark_border</mat-icon>&nbsp;{{item.url}} ({{item.type}})</mat-list-item>
+                    <mat-list-item *ngFor="let item of contactInfo.phoneNumbers">
+                        <mat-icon>phone</mat-icon>&nbsp;{{item.number}} ({{item.type}})</mat-list-item>
+                </mat-list>
+            </mat-card>
+
+        </div>
+
+    </div>
+</div>

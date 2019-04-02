@@ -1,0 +1,20 @@
+<div fxLayout="row" fxLayoutWrap="wrap">
+    <div fxLayout="column" fxFlex="100" fxFlex.gt-md="100">
+        <mat-card class="p-0">
+            <mat-card-title class="">
+                <div class="card-title-text">Wallet</div>
+                <mat-divider></mat-divider>
+            </mat-card-title>
+            <mat-card-content class="mt-1" *ngIf="loaded">
+                <mat-list *ngFor="let item of formFieldsEdit">
+                    <div *ngIf="item.key=='credits'">
+                        <B> {{item.attr.label}} :</B> {{item.attr.value}}
+                    </div>
+                    <div *ngIf="item.key!='credits' && userSvc.user.wallet.auto_fill==1">
+                        <B> {{item.attr.label}} :</B> {{item.attr.value}}
+                    </div>
+                </mat-list>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>

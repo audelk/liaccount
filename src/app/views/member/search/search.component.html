@@ -1,0 +1,114 @@
+<div fxLayout="row" fxLayoutWrap="wrap">
+    <div fxLayout="column" fxFlex="100" fxFlex.gt-md="100" *ngIf="loaded">
+        <mat-card class=" p-0">
+            <mat-card-title class="">
+                <div class="card-title-text">Search</div>
+                <mat-divider></mat-divider>
+            </mat-card-title>
+            <mat-card-content>
+                <mat-accordion>
+                    <mat-expansion-panel>
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                Available Search Fields
+                            </mat-panel-title>
+
+                        </mat-expansion-panel-header>
+                        <div class="mb-1 mt-1 ">
+                            <div fxLayout="row" fxLayoutWrap="wrap">
+                                <div fxLayout="column" fxFlex="100" fxFlex.gt-xs="50" fxFlex.gt-md="50" *ngFor="let field of formFields">
+                                    <mat-checkbox [disabled]='field.validators.required==true?true:false' (change)="availableFieldsUpdate(field.key,$event)" [(ngModel)]="field.attr.value">{{field.attr.label}}</mat-checkbox>
+                                </div>
+                            </div>
+                        </div>
+                    </mat-expansion-panel>
+                </mat-accordion>
+                <div class="mt-1 pt-1">
+                    <div *ngIf="!searchloaded">
+                        <mat-progress-bar [mode]="progressMode" [value]="done"></mat-progress-bar>
+                    </div>
+                    <div *ngFor="let item of res.errors" class="mat-bg-warn p-1 mb-1" role="alert">
+                        {{item}}
+                    </div>
+                    <div *ngFor="let item of res.successes" class="mat-bg-accent p-1 mb-1" role="alert">
+                        {{item}}
+                    </div>
+                    <div *ngIf="res.data.result_count>0 &&downloadStep=='searched' && userSvc.user.wallet.credits<=0" class="mat-bg-accent p-1 mb-1" role="alert">
+                        <p>
+                            You have {{userSvc.user.wallet.credits}} credits available. You can save the results for later download.
+                        </p>
+                        <button mat-raised-button (click)="downloadSave()">Save Results</button>
+                    </div>
+
+                    <div *ngIf="res.data.result_count>0 &&downloadStep=='searched' && userSvc.user.wallet.credits>0" class="mat-bg-accent p-1 mb-1" role="alert">
+                        <p>
+                            If not enough download credit are available, remainig records will be saved automatically, so you can download them at a later date.
+                        </p>
+                        <button mat-raised-button (click)="downloadConfirm()">Download Results</button>
+                    </div>
+                    <div *ngIf="res.status && downloadStep=='downloadGenerated'" class="mat-bg-accent p-1 mb-1" role="alert">
+                        Your CSV file is generated.
+                        <BR>
+                        <a target="_blank" href="{{dataSvc.website}}{{res.data.csvData.url}}">Download file 
+                            <mat-icon>cloud_download</mat-icon> here</a>.
+                    </div>
+                    <form method="post" #cartForm="ngForm" (ngSubmit)="onSubmit(cartForm,$event)" [formGroup]="form" action="#">
+                        <div fxLayout="row" fxLayout.lt-sm="column" fxLayoutWrap="wrap">
+                            <div fxFlex="100"></div>
+                            <div fxFlex="33" class="pr-1" *ngFor="let field of formFieldsEdit">
+                                <mat-form-field class="full-width">
+
+
+
+                                    <input [maxlength]="field.attr.maxLength" matInput name="{{field.key}}" *ngIf="field.controlType=='textbox' && field.key!='password'" [type]="field.attr.type" placeholder="{{field.attr.placeholder}}" [formControlName]="field.key" [(ngModel)]="field.attr.value">
+                                    <input matInput name="{{field.key}}" *ngIf="field.controlType=='textbox' && field.attr.type=='password'" [type]="field.attr.type" placeholder="{{field.attr.placeholder}}" [formControlName]="field.key" [(ngModel)]="field.attr.value">
+                                    <textarea matTextareaAutosize matAutosizeMinRows="2" matAutosizeMaxRows="5" matInput name="{{field.key}}" *ngIf="field.controlType=='textarea' " [type]="field.attr.type" placeholder="{{field.attr.placeholder}}" [formControlName]="field.key" [(ngModel)]="field.attr.value">
+             </textarea>
+                                    <div fxLayout="row" fxLayoutWrap="wrap" *ngIf="field.controlType=='textbox' && field.key=='password' && field.attr.type!='password'">
+                                        <div fxFlex="80" class="p0">
+                                            <input matInput name="{{field.key}}" [type]="field.attr.type" placeholder="{{field.attr.placeholder}}" [formControlName]="field.key" [(ngModel)]="field.attr.value">
+                                        </div>
+                                        <div fxFlex="20" class="p0">
+                                            <a (click)='genPassword()' color="primary mat-raised-button">
+                                                <mat-icon>loop</mat-icon>Generate</a>
+                                        </div>
+                                    </div>
+                                    <mat-select placeholder="{{field.attr.label}}" *ngIf="field.controlType=='dropdown'" [formControlName]="field.key" [(ngModel)]="field.attr.value">
+
+                                        <mat-option *ngFor="let key of field.keys ;" [value]="key">{{field.attr.values[key]}}</mat-option>
+                                    </mat-select>
+                                    <span *ngIf="field.controlType=='date'">
+                    <input matInput [matDatepicker]="picker1" placeholder="{{field.attr.label}}" [formControlName]="field.key" [value]="field.attr.value">
+  <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+  <mat-datepicker #picker1></mat-datepicker>
+                </span>
+
+                                </mat-form-field>
+                                <small *ngIf="form.controls[field.key].invalid && (form.controls[field.key].dirty || form.controls[field.key].touched)" class="form-error-msg">
+                <span *ngIf="form.controls[field.key].errors.required">
+                                         {{field.attr.label+' required.'}}
+                                        </span>
+                <span *ngIf="form.controls[field.key].errors.minlength">
+                                         {{field.attr.label+' must be atleast ' + field.validators.minLength +' characters long.'}}
+                                        </span>
+                <span *ngIf="form.controls[field.key].errors.pattern">
+                                            Invalid characters detected.
+                                        </span>
+                <span *ngIf="form.controls[field.key].errors.email">
+                                           Invalid email format.
+                                        </span>
+
+            </small>
+                            </div>
+
+                            <div fxFlex="100"></div>
+                            <button data-style="expand-left" [ladda]='isLoading' mat-raised-button color="primary" class="mat-primary  mb-1 btn-ladda" type="submit"><span class="ladda-label">Submit</span></button>
+
+
+                        </div>
+                    </form>
+                </div>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>

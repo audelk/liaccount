@@ -1,0 +1,50 @@
+<div fxLayout="row" fxLayoutAlign="center center" *ngIf="universalMessage" class="p-1 mat-bg-accent">
+    <div fxFlex="100" fxFlex.gt-sm="70" [innerHtml]="res.data.universalMessage.data.text"></div>
+</div>
+<div class="page-wrap height-100 mat-bg-primary">
+
+    <div class="session-form-hold">
+        <mat-progress-bar mode="determinate" class="session-progress"></mat-progress-bar>
+
+        <mat-card>
+            <mat-card-content *ngIf="ready">
+
+                <div class="text-center pb-1">
+                    <img src="assets/images/logo-full.png" alt="" class="mb-05">
+                    <p class="text-muted m-0">Sign in using your linkedin account</p>
+                </div>
+                <div *ngFor="let item of data.errors" class="p-1 mb-1 mat-bg-warn">
+                    {{lang.trans(item)}}
+                </div>
+                <form [formGroup]="signinForm" (ngSubmit)="doLogin()">
+                    <div class="">
+                        <mat-form-field class="full-width">
+                            <input matInput name="userName" [formControl]="signinForm.controls['userName']" placeholder="Email" value="">
+                        </mat-form-field>
+                        <small *ngIf="signinForm.controls['userName'].invalid && signinForm.controls['userName'].touched" class="form-error-msg">
+                        <span *ngIf="signinForm.controls['userName'].errors.required"> Username/Email Required.</span>
+                        <span *ngIf="signinForm.controls['userName'].errors.minlength">Username/Email must be atleast  5 characters long.</span>
+                        <span *ngIf="signinForm.controls['userName'].errors.pattern">Invalid characters detected.</span></small>
+
+                    </div>
+
+                    <div class="">
+                        <mat-form-field class="full-width">
+                            <input type="password" name="password" matInput [formControl]="signinForm.controls['password']" placeholder="Password" value="">
+                        </mat-form-field>
+                        <small *ngIf="signinForm.controls['password'].invalid && signinForm.controls['password'].touched" class="form-error-msg">
+                        <span *ngIf="signinForm.controls['password'].errors.required"> Password Required.</span>
+                        <span *ngIf="signinForm.controls['password'].errors.minlength">Password must be atleast  4 characters long.</span>
+                        <span *ngIf="signinForm.controls['password'].errors.pattern">Invalid characters detected.</span></small>
+
+                    </div>
+
+
+                    <button mat-raised-button class="mat-primary full-width mb-1" [disabled]="signinForm.invalid">Sign in</button>
+
+                </form>
+
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>

@@ -1,0 +1,57 @@
+<mat-card class="p-0">
+    <mat-tab-group>
+        <mat-tab label="Summary">
+            <mat-card-content class="mt-1">
+                <ngx-datatable class="material ml-0 mr-0" [rows]="items" [columnMode]="'flex'" [headerHeight]="50" [footerHeight]="50" [limit]="10" [rowHeight]="'auto'">
+                    <ngx-datatable-column [sortable]="false" name="Name" [flexGrow]="1">
+                        <ng-template let-row="row" ngx-datatable-cell-template>
+                            {{ row.name }}
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column [sortable]="false" name="Code" [flexGrow]="1">
+                        <ng-template let-row="row" ngx-datatable-cell-template>
+                            {{ row.affiliate_code }}
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column [sortable]="false" name="Status" [flexGrow]="1">
+                        <ng-template let-row="row" ngx-datatable-cell-template>
+                            {{row.active}}
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column [sortable]="false" name="Subscription" [flexGrow]="1">
+                        <ng-template let-row="row" ngx-datatable-cell-template>
+                            {{row.subscription}}
+                        </ng-template>
+                    </ngx-datatable-column>
+                </ngx-datatable>
+            </mat-card-content>
+        </mat-tab>
+        <mat-tab label="Links">
+            <mat-card-content class="mt-1">
+                <div fxLayout="row" fxLayoutAlign="space-between ">
+                    <div fxFlex>
+                        <button (click)="requestCode()" mat-raised-button color="primary" class='margin-333'>Request New Affiliate Code</button>
+                    </div>
+
+
+                </div>
+
+                <ngx-datatable class="material ml-0 mr-0" [rows]="linkItems" [columnMode]="'flex'" [headerHeight]="50" [footerHeight]="50" [limit]="10" [rowHeight]="'auto'">
+                    <ngx-datatable-column [sortable]="false" name="Urls" [flexGrow]="3">
+                        <ng-template let-row="row" ngx-datatable-cell-template>
+                            {{row.url}}
+                        </ng-template>
+
+                    </ngx-datatable-column>
+                    <ngx-datatable-column [sortable]="false" name="Code" [flexGrow]="1">
+                        <ng-template let-row="row" ngx-datatable-cell-template>
+                            {{row.code}}
+                        </ng-template>
+
+                    </ngx-datatable-column>
+                </ngx-datatable>
+            </mat-card-content>
+        </mat-tab>
+
+    </mat-tab-group>
+</mat-card>

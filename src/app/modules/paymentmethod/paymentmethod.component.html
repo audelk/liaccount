@@ -1,0 +1,66 @@
+<div fxLayout="row" fxLayoutWrap="wrap">
+    <div fxLayout="column" fxFlex="100" fxFlex.gt-md="50">
+
+        <mat-card class="p-0">
+            <mat-card-title>
+                <div class="card-title-text"><b>{{showStripeForm==false?"Payment Method":"Update Payment Method"}}</b> {{ prospectRes.data.email}}</div>
+            </mat-card-title>
+            <mat-card-content class="p-1">
+                <div *ngIf="isLoading" class="m-1">
+                    <mat-progress-bar mode="indeterminate" class="session-progress"></mat-progress-bar>
+                </div>
+                <div class="cell example example1" *ngIf="!showStripeForm">
+                    <fieldset>
+                        <div class="row">
+                            <label for="example1-name" data-tid="elements_examples.form.name_label">{{methodData.brand}}</label>
+                            <input disabled="true" id="example1-name" type="text" placeholder="Card" value="{{methodData.last4}}">
+                        </div>
+                    </fieldset>
+                    <button (click)="edit()" style="margin-left: 15px;" mat-raised-button class="mat-bg-primary" type="submit">Edit</button>
+                </div>
+                <div class="cell example example1" [hidden]="!showStripeForm">
+                    <form novalidate (ngSubmit)="stripeCheckout($event)" [formGroup]="stripeTest">
+
+                        <fieldset>
+                            <div class="row">
+                                <label for="example1-name" data-tid="elements_examples.form.name_label">Name</label>
+                                <input id="example1-name" type="text" placeholder="Name" formControlName="name">
+                            </div>
+                        </fieldset>
+                        <fieldset>
+                            <div class="row">
+                                <div id="example1-card" class="field"></div>
+                            </div>
+                        </fieldset>
+
+                        <button style="margin-left: 15px;" mat-raised-button class="mat-bg-primary" type="submit">Save</button>
+                        <button (click)="showStripeForm=false" style="margin-left: 15px;" mat-raised-button class="mat-bg-accent" type="submit">Close</button>
+                    </form>
+                </div>
+            </mat-card-content>
+        </mat-card>
+
+
+    </div>
+    <div fxLayout="column" fxFlex="100" fxFlex.gt-md="100">
+        <mat-card class="p-0">
+            <mat-card-title>
+                <div class="card-title-text"><b>External Payment Method Page</b></div>
+            </mat-card-title>
+            <mat-card-content class="p-1">
+                <button (click)="generateNew()" style="margin-left: 15px;" mat-raised-button class="mat-bg-primary" type="submit">Generate New</button>
+
+
+
+
+                <div *ngFor="let item of resAccessList.data" class="p-1 full-width">
+                    <mat-form-field class="full-width">
+                        <div class="mat-color-warn mb-1">This url will expired on {{item.expDate | date:'medium'}}</div>
+                        <textarea rows="6" matInput style=" display:block;clear:both;resize: none;">https://appv2.mylinkedsolution.com/vip/#/update-payment-method/{{item.token}} </textarea>
+                    </mat-form-field>
+                </div>
+
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>

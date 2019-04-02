@@ -1,0 +1,110 @@
+<div fxLayout="row" fxLayoutAlign="space-between ">
+
+    <div fxFlex class="search-bar">
+
+        <form class="top-search-form mat-box-shadow">
+            <mat-icon role="img">search</mat-icon>
+            <input autofocus="true" placeholder="Search Customers" type="text" (keyup)='updateFilter($event)'>
+        </form>
+    </div>
+
+</div>
+<div fxLayout="row" fxLayoutWrap="wrap">
+    <div fxLayout="column" fxFlex="100">
+        <div *ngFor="let item of res.errors" class="p-1 margin-333 pr-1 mat-bg-warn">
+            {{lang.trans(item)}}
+        </div>
+        <div *ngFor="let item of res.successes" class="p-1 margin-333 mat-bg-accent">
+            {{lang.trans(item)}}
+        </div>
+    </div>
+    <div *ngIf="isLoading==true" class="m-1" fxFlex="100">
+        <mat-progress-bar mode="indeterminate" class="session-progress"></mat-progress-bar>
+    </div>
+</div>
+<mat-card class="p-1">
+    <mat-card-content class="p-0">
+        <ngx-datatable [selectAllRowsOnPage]="false" #myTable class="material ml-0 mr-0" [rows]="res.data.records" [columnMode]="'force'" [headerHeight]="50" [footerHeight]="50" [limit]="10" [rowHeight]="'auto'">
+            <!-- Row Detail Template -->
+            <ngx-datatable-row-detail [rowHeight]="'auto'" #myDetailRow>
+                <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
+                    <div style="padding-left:35px;">
+                        <div *ngIf='invoices && invoices[row.str_customer_id]'>
+                            <mat-list>
+                                <h3 mat-subheader>Invoices</h3>
+                                <mat-list-item *ngFor="let inv of invoices[row.str_customer_id].invoices">
+                                    <mat-icon mat-list-icon>receipt</mat-icon>
+                                    <h4 mat-line>${{inv.amount_paid/100}} <small><B>{{inv.status}}</B></small> </h4>
+                                    <p mat-line> {{inv.period_end*1000 | date:'mediumDate'}} </p>
+                                </mat-list-item>
+                            </mat-list>
+                        </div>
+                    </div>
+                </ng-template>
+            </ngx-datatable-row-detail>
+
+            <ngx-datatable-column name="Email" [flexGrow]="1" prop="email">
+                <ng-template let-row="row" ngx-datatable-cell-template>
+                    {{ row.email}}
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Name" [flexGrow]="1" prop="name">
+                <ng-template let-row="row" ngx-datatable-cell-template><small>
+                    {{row.name}}</small>
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Status" [canAutoResize]="false" [width]="200" prop="stripe.status">
+                <ng-template let-row="row" ngx-datatable-cell-template>
+
+                    <div class="full-width  fontcolor-{{row.stripe.status}}">{{row.stripe.status}}</div>
+
+                </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column name="Start" [canAutoResize]="false" [width]="150" prop="stripe.start">
+                <ng-template let-row="row" ngx-datatable-cell-template>
+                    <div *ngIf="row.stripe.status=='active' || row.stripe.status=='trialing'">
+                        <small> {{(row.stripe.start*1000) | date:'mediumDate'}}</small>
+                    </div>
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Current Period" [canAutoResize]="false" [width]="150">
+                <ng-template let-row="row" ngx-datatable-cell-template>
+                    <div *ngIf="row.stripe.status=='active' || row.stripe.status=='trialing'">
+                        <small>{{row.stripe.sub.current_period_start*1000 | date:'mediumDate'}} to {{row.stripe.sub.current_period_end*1000 | date:'mediumDate'}}</small>
+                    </div>
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column [width]="50" [resizeable]="false" [sortable]="false" [draggable]="false" [canAutoResize]="false">
+                <ng-template let-row="row" let-expanded="expanded" ngx-datatable-cell-template>
+                    <a href="javascript:void(0)" [class.datatable-icon-right]="!expanded" [class.datatable-icon-down]="expanded" title="Expand/Collapse Row" (click)="toggleExpandRow(row)">
+                    </a>
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Paid" [canAutoResize]="false" [width]="120">
+                <ng-template let-row="row" ngx-datatable-cell-template>
+                    <div *ngIf='invoices && invoices[row.str_customer_id]'>
+                        ${{invoices[row.str_customer_id].totalPaid/100}} ({{invoices[row.str_customer_id].invoices.length}})
+                    </div>
+                </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column name="Plan" [canAutoResize]="false" [width]="150" prop="stripe.plan">
+                <ng-template let-row="row" ngx-datatable-cell-template>
+                    <small>{{row.stripe.plan}}</small>
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Action" [canAutoResize]="false" [width]="200">
+                <ng-template let-row="row" ngx-datatable-cell-template>
+                    <button mat-icon-button color="accent" routerLink="paymentmethod/{{row.id}}" matTooltip="Payments Info">
+                        <mat-icon>credit_card</mat-icon>
+                    </button >                    
+                    <button mat-icon-button color="primary" (click)="edit(row.id)" matTooltip="Edit">
+                        <mat-icon >edit</mat-icon>
+                    </button>
+
+                </ng-template>
+            </ngx-datatable-column>
+        </ngx-datatable>
+    </mat-card-content>
+</mat-card>

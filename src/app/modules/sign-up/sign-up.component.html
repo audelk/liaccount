@@ -1,0 +1,30 @@
+<div class="page-wrap height-100 mat-bg-primary">
+    <div class="session-form-hold">
+        <mat-progress-bar mode="determinate" class="session-progress"></mat-progress-bar>
+        <mat-card>
+            <mat-card-content>
+                <div class="text-center pb-1">
+                    <img src="assets/images/logo-full.png" alt="" class="mb-05">
+                    <h4 class=" m-0">Sign Up</h4>
+                </div>
+                <div *ngFor="let item of res.errors" class="p-1 mb-1 mat-bg-warn" role="alert">
+                    {{lang.trans(item)}}
+                </div>
+                <div *ngFor="let item of res.successes" class="p-1 mb-1 mat-bg-accent" role="alert">
+                    {{lang.trans(item)}}
+                </div>
+                <div *ngIf="isLoading" class="m-1">
+                    <mat-progress-bar mode="indeterminate" class="session-progress"></mat-progress-bar>
+                </div>
+
+                <div *ngIf="isLoading==false && res1.status==true  && accountLoaded==false ">
+                    <small class="mat-color-primary">Enter the following information and we will send you an email with a unique link to sign up. The process only takes 5 minutes!</small>
+                    <dynamic-form [formOpts]="formOptions" [submitText]="'Submit'" [fields]="formFields" (formSubmit)="onSubmit($event)">
+
+                    </dynamic-form>
+                </div>
+
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>

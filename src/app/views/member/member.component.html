@@ -1,0 +1,66 @@
+<div style="max-width:1600px">
+    <div fxLayout="row" fxLayoutAlign="space-between ">
+        <div fxFlex>
+            <button (click)="openNewDialog()" mat-raised-button color="primary" class='margin-333'><mat-icon class="">credit_card</mat-icon> New Member</button>
+        </div>
+        <div fxFlex class="search-bar">
+
+            <form class="top-search-form mat-box-shadow">
+                <mat-icon role="img">search</mat-icon>
+                <input autofocus="true" [(ngModel)]="searchText" placeholder="Search user name" type="text" [ngModelOptions]="{standalone: true}">
+            </form>
+        </div>
+
+    </div>
+    <div fxLayout="row" fxLayoutWrap="wrap">
+        <div fxFlex="100" *ngFor="let item of res.errors" class="p-1 margin-333 pr-1 mat-bg-warn">
+            {{lang.trans(item)}}
+        </div>
+        <div fxFlex="100" *ngFor="let item of res.successes" class="p-1 margin-333 mat-bg-accent">
+            {{lang.trans(item)}}
+        </div>
+
+        <div *ngFor="let user of res.data.records | filter : searchText" fxFlex="100" fxFlex.gt-sm="33" fxFlex.sm="50">
+            <mat-card class="user-card p-0">
+                <mat-card-title class="mat-bg-primary">
+                    <div class="card-title-text">
+                        <a href="" routerLink="../{{user.user_id}}" class="toolbar-avatar md mr-1"><img src="{{dataSvc.website}}/{{user.profile_pic}}" alt=""></a>
+                        <span>
+                        <small>{{user.user_name}}<BR>
+                        {{user.first_name + ' '+ user.middle_name+' '+user.last_name}}</small></span>
+                        <span fxFlex></span>
+                        <button mat-icon-button [matMenuTriggerFor]="userMenu" class="">
+              <mat-icon class="">more_vert</mat-icon>
+          </button>
+                        <mat-menu #userMenu="matMenu">
+                            <button mat-menu-item (click)="edit(user.user_id)">Account</button>
+                            <button mat-menu-item (click)="editPass(user.user_id)">Password</button>
+                            <button mat-menu-item (click)="editProfile(user.user_id)">Personal Info</button>
+                            <button mat-menu-item (click)="editPicture(user.user_id)">Picture</button>
+                            <button mat-menu-item (click)="delete(user.id)">Delete</button>
+                        </mat-menu>
+                    </div>
+                    <mat-divider></mat-divider>
+                </mat-card-title>
+                <mat-card-content>
+                    <!-- user detail lines-->
+                    <div class="user-details">
+                        <p>
+                            <mat-icon matTooltip="Registration Date" matTooltipPosition="after" class="text-muted">check_circle</mat-icon>{{user.sign_up_stamp}}</p>
+                        <p>
+                            <p>
+                                <mat-icon matTooltip="Email" matTooltipPosition="after" class="text-muted">email</mat-icon>{{user.email}}</p>
+                            <p>
+                                <p>
+                                    <mat-icon matTooltip="Mobile" matTooltipPosition="after" class="text-muted">phone</mat-icon>{{user.mobile}}</p>
+                                <p>
+                                    <mat-icon matTooltip="Address" matTooltipPosition="after" class="text-muted">location_on</mat-icon>{{user.caddress}}
+                                </p>
+
+                    </div>
+                </mat-card-content>
+            </mat-card>
+        </div>
+    </div>
+
+</div>

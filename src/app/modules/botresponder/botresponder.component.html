@@ -1,0 +1,69 @@
+<div fxLayout="row" fxLayoutWrap="wrap">
+    <div fxLayout="column" fxFlex="100" fxFlex.gt-md="30">
+        <button (click)="openNewDialog()" mat-raised-button color="primary" class='full-width mb-1'><mat-icon class="">send</mat-icon> Add Messenger Campaign</button>
+    </div>
+    <span fxFlex></span>
+    <div fxLayout="column" fxFlex="100" fxFlex.gt-md="70">
+        <mat-accordion class="ml-1 mr-1 ">
+            <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        Want to communicate with your existing network? Start new Messenger Campaign.
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+
+                <div class="pl-1 pr-1 pb-1">
+                    <ul>
+                        <li>
+                            <p>
+                                Set up steps with personalized automated messages for your first message or for a follow-up message, set another automated follow-up message if no response is received in a few days. This is done by clicking on the Messages tab inside the Messenger Campaign.</p>
+                        </li>
+                        <li>
+                            <p>
+                                To add people from your network to the Messenger Campaign click on <b>Connections</b> in the top menu. Select people you would like to be added to Messenger Campaign(you can select all by click the top most checkbox) and
+                                click 'Add selected contacts to Messenger Campaign'. Select contacts by clicking the checkboxes for each contact.</p>
+                        </li>
+                    </ul>
+                </div>
+            </mat-expansion-panel>
+        </mat-accordion>
+
+    </div>
+
+</div>
+<div fxLayout="row" fxLayoutWrap="wrap" class="mt-1">
+
+    <div fxLayout="column" *ngFor="let item of items" fxFlex="100" fxFlex.gt-md="25">
+        <mat-card class="user-card p-0">
+            <mat-card-title class="bg-white">
+                <div class="card-title-text">
+                    <a href="" routerLink="./setup/{{item.id}}" matTooltip="Messenger Campaign" class="toolbar-avatar md mr-1">
+                        <mat-icon class="" style='font-size: 50px;'>send</mat-icon>
+                    </a>
+                    <span>
+                        {{item.name}}</span>
+                    <span fxFlex></span>
+                    <button mat-icon-button [matMenuTriggerFor]="userMenu" class="">
+              <mat-icon class="">more_vert</mat-icon>
+          </button>
+                    <mat-menu #userMenu="matMenu">
+                        <button mat-menu-item (click)="edit(item.id)">Edit</button>
+                        <button mat-menu-item (click)="delete(item.id)">Delete</button>
+                    </mat-menu>
+                </div>
+                <mat-divider></mat-divider>
+            </mat-card-title>
+            <mat-card-content>
+                <p>
+                    <b> Status </b>: {{item.status}}
+                </p>
+                <p>
+                    <b> Connections </b>: {{item.cconnection}}
+                </p>
+                <p>
+                    <b> Replied</b> : {{item.creplied}}
+                </p>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>

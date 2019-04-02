@@ -1,0 +1,58 @@
+﻿<form method="post" #cartForm="ngForm" (ngSubmit)="onSubmit(cartForm,$event)" [formGroup]="form" [action]="submitUrl">
+
+    <div class="" *ngFor="let field of fields">
+        <div *ngIf="field.controlType=='checkbox'" class="mb-1">
+
+            <mat-checkbox [required]="field.validators.required" [formControlName]="field.key" [(ngModel)]="field.attr.value">{{field.attr.placeholder}}</mat-checkbox>
+
+        </div>
+        <mat-form-field *ngIf="field.controlType!='checkbox'" class="full-width" [ngClass]="field.attr.type=='hidden'?'hidden':''">
+            <mat-label [ngClass]="field.attr.type=='hidden'?'hidden':''" *ngIf="!formOpts.iconLabel">{{field.attr.label}}</mat-label>
+
+
+            <input matInput name="{{field.key}}" *ngIf="field.controlType=='textbox' && field.key!='password'" [type]="field.attr.type" placeholder="{{field.attr.placeholder}}" [formControlName]="field.key" [(ngModel)]="field.attr.value">
+            <input matInput name="{{field.key}}" *ngIf="field.controlType=='textbox' && field.attr.type=='password'" [type]="field.attr.type" placeholder="{{field.attr.placeholder}}" [formControlName]="field.key" [(ngModel)]="field.attr.value">
+            <textarea matTextareaAutosize matAutosizeMinRows="4" matAutosizeMaxRows="10" matInput name="{{field.key}}" *ngIf="field.controlType=='textarea' " [type]="field.attr.type" placeholder="{{field.attr.placeholder}}" [formControlName]="field.key" [(ngModel)]="field.attr.value">
+             </textarea>
+            <div fxLayout="row" fxLayoutWrap="wrap" *ngIf="field.controlType=='textbox' && field.key=='password' && field.attr.type!='password'">
+                <div fxFlex="80" class="p0">
+                    <input matInput name="{{field.key}}" [type]="field.attr.type" placeholder="{{field.attr.placeholder}}" [formControlName]="field.key" [(ngModel)]="field.attr.value">
+                </div>
+                <!-- <div fxFlex="20" class="p0">
+                    <a (click)='genPassword()' color="primary mat-raised-button">
+                        <mat-icon>loop</mat-icon>Generate</a>
+                </div> -->
+            </div>
+            <mat-select placeholder="{{field.attr.label}}" *ngIf="field.controlType=='dropdown'" [formControlName]="field.key" [(value)]="field.attr.value">
+                <mat-option *ngFor="let key of field.keys ;" [value]="key">{{lang.trans(field.attr.values[key])}}</mat-option>
+            </mat-select>
+
+            <span *ngIf="field.controlType=='date'">
+                    <input matInput [matDatepicker]="picker1" placeholder="{{field.attr.label}}" [formControlName]="field.key" [value]="field.attr.value">
+  <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+  <mat-datepicker #picker1></mat-datepicker>
+                </span>
+
+        </mat-form-field>
+        <small *ngIf="form.controls[field.key].invalid && (form.controls[field.key].dirty || form.controls[field.key].touched)" class="form-error-msg">
+                <span *ngIf="form.controls[field.key].errors.required">
+                                         {{lang.trans(field.attr.label+' required.')}}
+                                        </span>
+                <span *ngIf="form.controls[field.key].errors.minlength">
+                                         {{lang.trans(field.attr.label+' must be atleast ' + field.validators.minLength +' characters long.')}}
+                                        </span>
+                <span *ngIf="form.controls[field.key].errors.pattern">
+                                            {{lang.trans('Invalid characters detected.')}}
+                                        </span>
+                <span *ngIf="form.controls[field.key].errors.email">
+                                            {{lang.trans('Invalid email format.')}}
+                                        </span>
+
+            </small>
+    </div>
+
+    <button data-style="expand-left" [ladda]='isLoading' mat-raised-button color="primary" class="mat-primary  mb-1 btn-ladda" type="submit"><span class="ladda-label">{{submitText}}</span></button>
+
+
+
+</form>

@@ -1,0 +1,179 @@
+<div fxLayout="row" fxLayoutWrap="wrap">
+    <div *ngIf="loadingItems" class="m-1" fxFlex="100">
+        <mat-progress-bar mode="indeterminate" class="session-progress"></mat-progress-bar>
+    </div>
+    <div fxFlex="100" fxFlex.gt-sm="80" fxFlex.gt-md="calc(100% - 300px)">
+
+        <mat-card class="p-0">
+            <mat-card-content class="p-0">
+
+                <div class="m-1 p-1 mat-bg-accent" *ngIf="temp.length==0 && res.status">
+
+                    You need to add contacts to this Connector Campaign.
+                    <BR> 1. Click "Search" on the top menu.
+                    <BR> 2. Find people you would like to add to this Connector Campaign from your search results.
+                    <BR>3. Select and add people you would like to contact by clicking "Add selected contacts to Connector Campaign" button.
+                </div>
+                <ngx-datatable [selected]="selected" [selectionType]="'checkbox'" [selectAllRowsOnPage]="false" (activate)="onActivate($event)" (select)='onSelect($event)' #table class="material ml-0 mr-0" [rows]="items" [columnMode]="'force'" [headerHeight]="50" [footerHeight]="50"
+                    [limit]="10" [rowHeight]="'auto'">
+
+                    <ngx-datatable-column [width]="30" [sortable]="false" [canAutoResize]="false" [draggable]="false" [resizeable]="false" [headerCheckboxable]="true" [checkboxable]="true">
+                    </ngx-datatable-column>
+
+                    <ngx-datatable-column name="Name" [flexGrow]="1">
+                        <ng-template let-row="row" ngx-datatable-cell-template>
+                            <a class="toolbar-avatar md mr-1"><img src="{{row.picture || userSvc.noPicture}}" alt=""></a>
+                            <span>  {{ (row.firstName + ' ' + row.lastName )==" "?  row?.formattedName : (row.firstName + ' ' + row.lastName ) }}</span>
+
+                        </ng-template>
+                    </ngx-datatable-column>
+
+                    <ngx-datatable-column name="Title" [flexGrow]="1">
+                        <ng-template let-row="row" ngx-datatable-cell-template>
+
+                            <span [innerHTML]="row?.title || row?.occupation">   </span>
+                        </ng-template>
+                    </ngx-datatable-column>
+
+                    <ngx-datatable-column name="Company" [flexGrow]="1">
+                        <ng-template let-row="row" ngx-datatable-cell-template>
+
+                            <span>  {{  row.company}}</span>
+
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column name="Location" [flexGrow]="1">
+                        <ng-template let-row="row" ngx-datatable-cell-template>
+                            {{ row?.location }}
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column name="Status" [canAutoResize]="false" [width]="210">
+                        <ng-template let-column="column" ngx-datatable-header-template>
+                            <mat-form-field>
+                                <mat-select placeholder="State" [(value)]="statusFiltersSelected" (selectionChange)="onStatusFilterChange($event)">
+                                    <mat-option *ngFor="let status of statusFilters" [value]="status.value">
+                                        {{status.viewValue}}
+                                    </mat-option>
+                                </mat-select>
+                                <mat-label><b>Status</b></mat-label>
+                            </mat-form-field>
+                        </ng-template>
+                        <ng-template let-row="row" ngx-datatable-cell-template>
+                            <div class="full-width bgcolor-{{row.status}}">
+                                <button matTooltip="Manually set status" matTooltipPosition="before" mat-icon-button [matMenuTriggerFor]="userMenu">
+              <mat-icon class="">more_vert</mat-icon>
+          </button> {{ row?.status }}</div>
+                            <mat-menu #userMenu="matMenu">
+                                <button matTooltip="Old contacts, imported from your linkedin account" mat-menu-item (click)="setStatus(row,'imported')" class="bgcolor-imported">Imported</button>
+                                <button matTooltip="Welcome message sent to newly connected prospect" mat-menu-item (click)="setStatus(row,'welcome_message')" class="bgcolor-welcome_message">Welcome message</button>
+                                <button matTooltip="" mat-menu-item (click)="setStatus(row,'replied')" class="bgcolor-replied">Replied</button>
+                                <button matTooltip="" mat-menu-item (click)="setStatus(row,'chatting')" class="bgcolor-chatting">Chatting</button>
+                                <button matTooltip="" mat-menu-item (click)="setStatus(row,'ignore')" class="bgcolor-ignore">Ignore</button>
+                                <button matTooltip="" mat-menu-item (click)="setStatus(row,'cancel')">Cancel</button>
+                            </mat-menu>
+                        </ng-template>
+                    </ngx-datatable-column>
+                </ngx-datatable>
+            </mat-card-content>
+        </mat-card>
+    </div>
+    <div fxFlex="100" fxFlex.gt-sm="20" fxFlex.gt-md="300px">
+        <mat-card class="p-0">
+            <mat-sidenav-container class="chat-container">
+                <!-- Left sidebar -->
+
+
+                <!-- Right side -->
+                <div class="chats-wrap">
+                    <!-- Right side topbar -->
+                    <mat-progress-bar mode="indeterminate" *ngIf='chatLoading'></mat-progress-bar>
+                    <mat-toolbar color="primary" class="chat-toolbar mb-1">
+
+
+                        <!-- Selected active user -->
+                        <div class="active-chat-user" fxLayout="row" fxLayoutAlign="start center">
+
+                            <div *ngIf="currentCon.firstName==undefined" fxLayout="column">
+                                <h6 class="m-0 font-normal fz-1">Messenger</h6>
+
+                            </div>
+                            <a *ngIf="currentCon" class="toolbar-avatar mr-1">
+                                <img [src]="currentCon.picture" alt="">
+
+                            </a>
+                            <div fxLayout="column" *ngIf="currentCon.firstName!=undefined">
+                                <h6 class="m-0 font-normal fz-1">{{currentCon.firstName + ' '+ currentCon.lastName}}</h6>
+                            </div>
+                        </div>
+
+
+                        <!-- Right side top menu -->
+                        <span fxFlex></span>
+
+                    </mat-toolbar>
+
+                    <!-- Main chat body -->
+                    <div class="conversations-hold">
+
+                        <!-- single chat item -->
+                        <div *ngFor="let msg of chatMessages">
+                            <div class="single-conversation sender" *ngIf="msg.sender=='Me'" fxLayout="row">
+                                <div>
+                                    <h5 class="chat-username text-muted">Me</h5>
+                                    <div class="conversation-msg">
+                                        {{msg.text}}
+                                    </div>
+                                    <p class="chat-date text-muted">{{(msg.createdAt ) |date:'short'}}</p>
+                                </div>
+                            </div>
+                            <div class="single-conversation me" *ngIf="msg.sender=='To'" fxLayout="row">
+                                <div>
+
+                                    <h5 class="chat-username text-muted">{{currentCon.firstName + ' '+currentCon.lastName}}</h5>
+                                    <div class="conversation-msg">
+                                        {{msg.text}}
+                                    </div>
+                                    <p class="chat-date text-muted">{{(msg.createdAt ) |date:'short'}}</p>
+                                </div>
+                            </div>
+                            <div class="single-conversation me" *ngIf="msg.sender=='In'" fxLayout="row">
+                                <div>
+                                    <h5 class="chat-username text-muted text-sm mat-color-primary">{{currentCon.firstName + ' '+currentCon.lastName}} is now connected</h5>
+
+                                    <p class="chat-date text-muted mat-color-primary">{{(msg.createdAt ) |date:'short'}}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <mat-divider></mat-divider>
+
+                    <!-- Input box and send button -->
+                    <div class="chat-input-actions" fxLayout="row">
+                        <mat-form-field class="full-width mr-1">
+                            <input matInput [(ngModel)]="msgToSend" placeholder="Type your message" value="">
+                        </mat-form-field>
+                        <button disabled mat-fab color="primary" (click)="msgSend()"><mat-icon>send</mat-icon></button>
+                    </div>
+
+                </div>
+            </mat-sidenav-container>
+        </mat-card>
+        <mat-card class="p-0">
+            <mat-card-content class="p-0 mb-1">
+                <mat-list>
+                    <mat-list-item *ngIf="currentCon.publicIdentifier">
+                        <mat-icon>link</mat-icon>&nbsp;<a href="{{userSvc.inProfileRoot + currentCon.publicIdentifier}}" target="_blank">{{userSvc.inProfileRoot + currentCon.publicIdentifier}}</a></mat-list-item>
+
+                    <mat-list-item>
+                        <mat-icon>group_add</mat-icon>&nbsp;{{contactInfo.connectedAt | date }} </mat-list-item>
+                    <mat-list-item>
+                        <mat-icon>email</mat-icon>&nbsp;{{contactInfo.emailAddress}} </mat-list-item>
+                    <mat-list-item *ngFor="let item of contactInfo.websites">
+                        <mat-icon>bookmark_border</mat-icon>&nbsp;{{item.url}} ({{item.type}})</mat-list-item>
+                    <mat-list-item *ngFor="let item of contactInfo.phoneNumbers">
+                        <mat-icon>phone</mat-icon>&nbsp;{{item.number}} ({{item.type}})</mat-list-item>
+                </mat-list>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>

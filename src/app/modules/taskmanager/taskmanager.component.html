@@ -1,0 +1,93 @@
+<div fxLayout="row" fxLayoutWrap="wrap">
+    <div *ngIf="loadingItems" class="m-1" fxFlex="100">
+        <mat-progress-bar mode="indeterminate" class="session-progress"></mat-progress-bar>
+    </div>
+    <div fxFlex="100" fxFlex.gt-sm="50" fxFlex.gt-md="50">
+        <mat-card class="user-card p-0">
+            <mat-card-title class="mat-bg-primary">
+                <div class="card-title-text">
+                    <a href="" matTooltip="Message" class="toolbar-avatar md mr-1">
+                        <mat-icon class="" style='font-size: 50px;'>queue_play_next</mat-icon>
+                    </a>
+                    <span>
+                        In queue
+                    </span>
+                    <span fxFlex></span>
+                    <mat-slide-toggle class="ml-1" (change)="updateSpeed($event)" [checked]="userSvc.inAccountSettings.data.invites_daily_max==75?false:true">{{userSvc.inAccountSettings.data.invites_daily_max==75?'1x':'2x'}} Speed</mat-slide-toggle>
+                </div>
+                <mat-divider></mat-divider>
+            </mat-card-title>
+            <mat-card-content class="p-0">
+                <ngx-datatable [selectAllRowsOnPage]="false" #table class="material ml-0 mr-0" [rows]="tasksList" [columnMode]="'force'" [headerHeight]="50" [footerHeight]="50" [limit]="10" [rowHeight]="'auto'">
+                    <ngx-datatable-column name="Type" [flexGrow]="1">
+                        <ng-template let-row="row" ngx-datatable-cell-template>
+                            {{ row?.type }}
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column name="Contact" [flexGrow]="1">
+                        <ng-template let-row="row" ngx-datatable-cell-template>
+                            <div *ngIf="row.type=='search'">
+                                {{ row.name}}
+                            </div>
+                            <div *ngIf="row.type!='search'">
+                                {{ row.fullName==" "?row.formattedName: row.fullName}}
+                            </div>
+
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column name="Order" [canAutoResize]="false" [width]="110">
+                        <ng-template let-rowIndex="rowIndex" let-row="row" ngx-datatable-cell-template>
+                            {{rowIndex+1}}
+                        </ng-template>
+                    </ngx-datatable-column>
+                </ngx-datatable>
+            </mat-card-content>
+        </mat-card>
+    </div>
+    <div fxFlex="100" fxFlex.gt-sm="50" fxFlex.gt-md="50">
+        <mat-card class="p-0 user-card ">
+            <mat-card-title class="mat-bg-primary">
+                <div class="card-title-text">
+                    <a href="" matTooltip="Message" class="toolbar-avatar md mr-1">
+                        <mat-icon class="" style='font-size: 50px;'>remove_from_queue</mat-icon>
+                    </a>
+                    <span>
+                       Completed
+                    </span>
+                    <span fxFlex></span>
+                </div>
+                <mat-divider></mat-divider>
+            </mat-card-title>
+            <mat-card-content class="p-0">
+                <ngx-datatable [selectAllRowsOnPage]="false" #table class="material ml-0 mr-0" [rows]="tasksCompleted" [columnMode]="'force'" [headerHeight]="50" [footerHeight]="50" [limit]="10" [rowHeight]="'auto'">
+                    <ngx-datatable-column name="Type" [flexGrow]="1">
+                        <ng-template let-row="row" ngx-datatable-cell-template>
+                            {{ row?.type }}
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column name="Name" [flexGrow]="1">
+                        <ng-template let-row="row" ngx-datatable-cell-template>
+                            <div *ngIf="row.type=='search'">
+                                {{ row.name}}
+                            </div>
+                            <div *ngIf="row.type!='search'">
+                                {{ row.fullName==" "?row.formattedName: row.fullName}}
+                            </div>
+
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column name="Status" [flexGrow]="1">
+                        <ng-template let-row="row" ngx-datatable-cell-template>
+                            {{row.status}}
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column name="Completion Date" [flexGrow]="1">
+                        <ng-template let-row="row" ngx-datatable-cell-template>
+                            {{row?.time | date:'dd-MM-yyyy @ HH:mm' }}
+                        </ng-template>
+                    </ngx-datatable-column>
+                </ngx-datatable>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>

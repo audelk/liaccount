@@ -1,0 +1,138 @@
+<h2 matDialogTitle>
+    <span>New Search Task</span>
+    <button mat-icon-button matDialogClose style="float:right">
+    <mat-icon >close</mat-icon></button>
+</h2>
+
+
+
+<mat-tab-group class="search-tab-group" (selectedTabChange)="selectedTabChange($event)">
+    <mat-tab label="Standard">
+        <div class="tab-content p-1">
+            <form method="post" #newform="ngForm" (ngSubmit)="onSubmit(newform,'standard_search')" [formGroup]="form" action="#">
+                <mat-form-field class="full-width" color="primary">
+                    <mat-label color="primary">{{formFields[0].attr.label}}</mat-label>
+                    <input matInput name="{{formFields[0].key}}" [type]="formFields[0].attr.type" placeholder="{{formFields[0].attr.placeholder}}" [formControlName]="formFields[0].key" [(ngModel)]="formFields[0].attr.value">
+                </mat-form-field>
+                <!--keywords-->
+                <mat-accordion class="ml-1 mr-1 ">
+                    <mat-expansion-panel>
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                <mat-icon>help_outline</mat-icon> We support Boolean search "OR","AND" and "NOT" for keywords field.
+                            </mat-panel-title>
+                        </mat-expansion-panel-header>
+
+                        <div class="pl-1 pr-1 pb-1">
+
+                            <p>Boolean Search: <strong>OR</strong></p>
+
+                            <p>Different words could be used to describe similar concepts. For example, CFO might have “CFO” in their profile, might also have “Chief Financial Office” or “CFOO”. JetBuzz supports the concept of OR, just make sure you always
+                                put “OR” in capital letters. If you are looking for a CFO, you could use the following search:<br>
+                                <u>CFO OR Chief Financial Officer OR CFOO</u><br> Search results will return those who have any of the above terms in their profile.</p>
+
+                            <p>Boolean Search: <strong>AND</strong></p>
+
+                            <p>AND allows to find people who have both terms in their profile. For example, you need someone who has both “CFO” and “Financial Director” in their profile:<br>
+                                <u>CFO AND Financial Director</u><br> Look at what you can do when you combine AND with OR:<br>
+                                <u>(CFO OR Chief Financial Officer OR CFOO) AND (Director OR Partner)</u><br> Make sure to use parentheses to group the OR terms together.</p>
+
+                            <p>Boolean Search: <strong>NOT</strong></p>
+
+                            <p>Another powerful operator is NOT. It helps you exclude those who have the term in their profile. For example, I’m don’t want to recruit CFO from my friends company, the search to use is:<br>
+                                <u>(CFO OR Chief Financial Officer OR CFOO) AND (Director OR Partner) AND NOT Friends Company</u></p>
+                        </div>
+                    </mat-expansion-panel>
+                </mat-accordion>
+                <mat-form-field class="full-width">
+                    <mat-label>{{formFields[2].attr.label}}</mat-label>
+                    <input matInput name="{{formFields[2].key}}" [type]="formFields[2].attr.type" placeholder="{{formFields[2].attr.placeholder}}" [formControlName]="formFields[2].key" [(ngModel)]="formFields[2].attr.value">
+                </mat-form-field>
+                <mat-accordion>
+                    <mat-expansion-panel>
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                Filters
+                            </mat-panel-title>
+
+                        </mat-expansion-panel-header>
+                        <!--title-->
+                        <mat-form-field class="full-width">
+                            <mat-label>{{formFields[3].attr.label}}</mat-label>
+                            <input matInput name="{{formFields[3].key}}" [type]="formFields[3].attr.type" placeholder="{{formFields[3].attr.placeholder}}" [formControlName]="formFields[3].key" [(ngModel)]="formFields[3].attr.value">
+                        </mat-form-field>
+                        <!--company-->
+                        <mat-form-field class="full-width">
+                            <mat-label>{{formFields[4].attr.label}}</mat-label>
+                            <input [matAutocomplete]="autoc" placeholder="Company" matInput [formControl]="companyCtrl">
+                            <mat-icon [ngClass]="companyLoading?'':'hide'" matSuffix class="fa-spin">rotate_right</mat-icon>
+
+                            <mat-autocomplete #autoc="matAutocomplete" [displayWith]="onCompanySelect">
+                                <mat-option *ngFor="let company of filteredCompanies" [value]="company">
+                                    <span>{{ company.text }}</span>
+                                </mat-option>
+                            </mat-autocomplete>
+                        </mat-form-field>
+
+
+                        <!--region-->
+                        <mat-form-field class="full-width">
+                            <mat-label>{{formFields[5].attr.label}} </mat-label>
+                            <input [matAutocomplete]="auto" placeholder="Location" matInput [formControl]="locationCtrl">
+                            <mat-icon [ngClass]="locationLoading?'':'hide'" matSuffix class="fa-spin">rotate_right</mat-icon>
+
+                            <mat-autocomplete #auto="matAutocomplete" [displayWith]="onLocationSelect">
+                                <mat-option *ngFor="let location of filteredLocations" [value]="location">
+                                    <span>{{ location.text }}</span>
+                                </mat-option>
+                            </mat-autocomplete>
+                        </mat-form-field>
+                        <!--industry-->
+                        <mat-form-field class="full-width">
+                            <mat-label>{{formFields[6].attr.label}}</mat-label>
+                            <input [matAutocomplete]="autoi" placeholder="Industry" matInput [formControl]="industryCtrl">
+                            <mat-icon [ngClass]="industryLoading?'':'hide'" matSuffix class="fa-spin">rotate_right</mat-icon>
+                            <mat-autocomplete #autoi="matAutocomplete" [displayWith]="onIndustrySelect">
+                                <mat-option *ngFor="let industry of filteredIndustries" [value]="industry">
+                                    <span>{{ industry.text }}</span>
+                                </mat-option>
+                            </mat-autocomplete>
+                        </mat-form-field>
+                    </mat-expansion-panel>
+                </mat-accordion>
+                <button mat-raised-button color="primary" class="mat-primary  mb-1 mt-1 " type="submit"><span class="ladda-label">Submit</span></button>
+            </form>
+        </div>
+    </mat-tab>
+    <mat-tab label="URL">
+        <div class="tab-content  p-1">
+            <form method="post" #newform2="ngForm" (ngSubmit)="onSubmit(newform2,'url_search')" [formGroup]="form2" action="#">
+                <mat-form-field class="full-width " color="primary">
+                    <mat-label>{{formFields2[0].attr.label}}</mat-label>
+                    <input matInput name="{{formFields2[0].key}}" [type]="formFields2[0].attr.type" placeholder="{{formFields2[0].attr.placeholder}}" [formControlName]="formFields2[0].key" [(ngModel)]="formFields2[0].attr.value">
+                </mat-form-field>
+                <mat-form-field class="full-width">
+                    <mat-label>{{formFields2[1].attr.label}}</mat-label>
+                    <input matInput name="{{formFields2[1].key}}" [type]="formFields2[1].attr.type" placeholder="{{formFields2[1].attr.placeholder}}" [formControlName]="formFields2[1].key" [(ngModel)]="formFields2[1].attr.value">
+                </mat-form-field>
+                <button mat-raised-button color="primary" class="mat-primary  mb-1 mt-1 " type="submit"><span class="ladda-label">Submit</span></button>
+            </form>
+        </div>
+    </mat-tab>
+    <mat-tab label="Sales Navigator">
+        <div class="tab-content  p-1">
+            <form method="post" #newform3="ngForm" (ngSubmit)="onSubmit(newform3,'sales_navigator_search')" [formGroup]="form3" action="#">
+                <mat-form-field class="full-width " color="primary">
+                    <mat-label>{{formFields3[0].attr.label}}</mat-label>
+                    <input matInput name="{{formFields3[0].key}}" [type]="formFields3[0].attr.type" placeholder="{{formFields3[0].attr.placeholder}}" [formControlName]="formFields3[0].key" [(ngModel)]="formFields3[0].attr.value">
+                </mat-form-field>
+                <mat-form-field class="full-width">
+                    <mat-label>{{formFields3[1].attr.label}}</mat-label>
+                    <input matInput name="{{formFields3[1].key}}" [type]="formFields3[1].attr.type" placeholder="{{formFields3[1].attr.placeholder}}" [formControlName]="formFields3[1].key" [(ngModel)]="formFields3[1].attr.value">
+                </mat-form-field>
+                <button mat-raised-button color="primary" class="mat-primary  mb-1 mt-1 " type="submit"><span class="ladda-label">Submit</span></button>
+            </form>
+        </div>
+    </mat-tab>
+
+</mat-tab-group>

@@ -1,0 +1,73 @@
+<div fxLayout="row" fxLayoutWrap="wrap">
+    <div fxLayout="column" fxFlex="100" fxFlex.gt-md="100">
+        <mat-card class="p-0">
+            <mat-card-title>
+                <div class="card-title-text">Downloads</div>
+            </mat-card-title>
+            <mat-card-content class="p-1">
+                <table class="default-table " style="width: 100%">
+                    <thead>
+                        <tr>
+                            <th>
+                                <B>Search Date</B>
+                            </th>
+                            <th>
+                                <B>Results Count</B>
+                            </th>
+                            <th>
+                                <B>Downloaded </B>
+                            </th>
+                            <th>
+                                <B>CSV Files</B>
+                            </th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr *ngFor="let row of downloads">
+                            <td>{{row.date}}</td>
+                            <td>{{row.result_count}}</td>
+                            <td>{{row.total_downloads}}</td>
+                            <td>
+                                <div *ngIf="currentSearchID==row.id">
+                                    <div *ngFor="let item of resd.errors" class="mat-bg-warn p-1 mb-1" role="alert">
+                                        {{item}}
+                                    </div>
+                                    <div *ngFor="let item of resd.successes" class="mat-bg-accent p-1 mb-1" role="alert">
+                                        {{item}}
+                                    </div>
+                                </div>
+                                <mat-list>
+
+                                    <mat-list-item *ngFor="let download of row.downloads">
+                                        <a target="_blank" href="{{dataSvc.website}}{{download.url}}">
+                                            <mat-icon mat-list-icon>insert_drive_file</mat-icon>
+                                        </a>
+                                        <h4 mat-line>Records downloaded : {{download.start}} - {{download.end}} </h4>
+                                        <p mat-line>Date: {{download.ddate}} </p>
+                                    </mat-list-item>
+                                    <mat-list-item style="height: auto;min-height:70px" class="mat-bg-accent p-05 mb-05 " *ngIf="row.result_count>row.total_downloads">
+                                        <div>
+                                            This search still have {{row.result_count-row.total_downloads}} records to download.
+
+                                            <button mat-raised-button (click)="downloadConfirm(row.id)">Download</button>
+
+                                        </div>
+                                    </mat-list-item>
+                                    <mat-divider></mat-divider>
+
+                                </mat-list>
+
+
+                            </td>
+
+                        </tr>
+                    </tbody>
+                </table>
+
+
+            </mat-card-content>
+        </mat-card>
+
+    </div>
+</div>

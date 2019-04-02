@@ -1,0 +1,109 @@
+<div fxLayout="row" fxLayoutWrap="wrap">
+
+    <div fxFlex="10" fxFlex.gt-sm="50" fxFlex.gt-md="50">
+        <div class="m-1">
+            <input class="mb-05" matInput name="keyword" [(ngModel)]="keyword" type="text" placeholder="Enter search text here">
+
+            <button (click)="searchNow()" mat-raised-button color="primary" class="mat-primary  mb-1 btn-ladda" type="submit">Search</button>
+        </div>
+        Search results count: {{totalResultCount}}
+    </div>
+    <div fxFlex="100" fxFlex.gt-sm="80" fxFlex.gt-md="calc(100% - 300px)">
+        <mat-card class="p-0">
+            <mat-card-content class="p-0">
+                <ngx-datatable class="material ml-0 mr-0" [rows]="items" [columnMode]="'flex'" [headerHeight]="50" [footerHeight]="50" [limit]="10" [rowHeight]="'auto'">
+                    <ngx-datatable-column name="Name" [flexGrow]="1">
+                        <ng-template let-row="row" ngx-datatable-cell-template>
+                            <a class="toolbar-avatar md mr-1"><img src="{{row.inProp.picture}}" alt=""></a>
+
+                            {{ row.inProp?.firstName }} {{ row.inProp?.lastName }}
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column name="Occupation" [flexGrow]="1">
+                        <ng-template let-row="row" ngx-datatable-cell-template>
+                            {{ row.inProp?.occupation }}
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column name="Industry" [flexGrow]="1">
+                        <ng-template let-row="row" ngx-datatable-cell-template>
+                            {{ row.inProp?.industry }}
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column name="Location" [flexGrow]="1">
+                        <ng-template let-row="row" ngx-datatable-cell-template>
+                            {{ row.inProp?.location }}
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column name="Actions" [flexGrow]="1">
+                        <ng-template let-row="row" ngx-datatable-cell-template>
+                            <button matTooltip="Message" mat-icon-button mat-sm-button color="primary" class="mr-1" (click)="edit(row)"><mat-icon>chat_bubble_outline</mat-icon></button>
+                        </ng-template>
+                    </ngx-datatable-column>
+                </ngx-datatable>
+            </mat-card-content>
+        </mat-card>
+    </div>
+    <div fxFlex="100" fxFlex.gt-sm="20" fxFlex.gt-md="300px">
+
+        <mat-card class="p-0">
+            <mat-sidenav-container class="chat-container">
+                <!-- Left sidebar -->
+
+
+                <!-- Right side -->
+                <div class="chats-wrap">
+                    <!-- Right side topbar -->
+                    <mat-toolbar color="primary" class="chat-toolbar mb-1">
+
+
+                        <!-- Selected active user -->
+                        <div class="active-chat-user" fxLayout="row" fxLayoutAlign="start center">
+
+                            <div fxLayout="column">
+                                <h6 class="m-0 font-normal fz-1">Message</h6>
+                            </div>
+                        </div>
+
+                        <!-- Right side top menu -->
+                        <span fxFlex></span>
+                        <button [style.alignSelf]="'center'" mat-icon-button [matMenuTriggerFor]="toolbarDDMenu" class="topbar-button-right hidden-on-open">
+            <mat-icon>more_vert</mat-icon>
+        </button>
+                        <mat-menu #toolbarDDMenu="matMenu">
+                            <button mat-menu-item><mat-icon>account_circle</mat-icon>action 1</button>
+                            <button mat-menu-item><mat-icon>volume_mute</mat-icon>action 2</button>
+                            <button mat-menu-item><mat-icon>delete</mat-icon>action 3</button>
+                        </mat-menu>
+                    </mat-toolbar>
+
+                    <!-- Main chat body -->
+                    <div class="conversations-hold">
+
+                        <!-- single chat item -->
+                        <div class="single-conversation sender" fxLayout="row">
+
+                            <div>
+                                <h5 class="chat-username text-muted">Gevorg Spartak</h5>
+                                <div class="conversation-msg">
+                                    Consectetur adipisicing elit. Delectus, obcaecati!
+                                </div>
+                                <p class="chat-date text-muted">10 min ago</p>
+                            </div>
+                        </div>
+                    </div>
+                    <mat-divider></mat-divider>
+
+                    <!-- Input box and send button -->
+                    <div class="chat-input-actions" fxLayout="row">
+                        <mat-form-field class="full-width mr-1">
+                            <input matInput placeholder="Type your message" value="">
+                        </mat-form-field>
+                        <button mat-fab color="primary"><mat-icon>send</mat-icon></button>
+                    </div>
+
+                </div>
+            </mat-sidenav-container>
+        </mat-card>
+
+    </div>
+</div>

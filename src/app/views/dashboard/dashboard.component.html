@@ -1,0 +1,194 @@
+<div fxLayout="row" fxLayoutWrap="wrap">
+    <!-- Gallery and chart column -->
+    <div fxFlex="100" fxFlex.gt-sm="33.33" fxLayout="column">
+        <mat-card class="default">
+            <mat-card-title>
+                <b>Connections</b>
+            </mat-card-title>
+            <mat-divider></mat-divider>
+            <mat-card-content class="p-0">
+                <mat-list class="compact-list">
+                    <mat-list-item>
+                        <div class="full-width">Current <span class="pull-right">{{connections.countAll}}</span></div>
+                    </mat-list-item>
+                    <mat-divider></mat-divider>
+                    <mat-list-item class="">
+                        <div class="full-width">Last 24 Hours <span class="pull-right">{{connections.countLast24Hours}}</span></div>
+                    </mat-list-item>
+                    <mat-divider></mat-divider>
+                    <mat-list-item class="">
+                        <div class="full-width">Last 7 Days <span class="pull-right">{{connections.countLast7Days}}</span></div>
+                    </mat-list-item>
+                    <mat-divider></mat-divider>
+                </mat-list>
+
+            </mat-card-content>
+        </mat-card>
+
+        <mat-card class="default">
+
+            <mat-card-title>
+                <b>Latest Messages</b>
+            </mat-card-title>
+            <mat-sidenav-container hasBackdrop="false" class="chat-container">
+
+                <!-- Right side -->
+                <mat-sidenav-content style="height:600px;">
+                    <div class="chats-wrap">
+
+
+                        <!-- Main chat body -->
+                        <mat-list class="compact-list mb-1">
+                            <mat-list-item class="" *ngFor="let t of messages" (click)="showMessages(t)">
+                                <img mat-list-avatar class="mr-1" [src]="t.picture" alt="">
+                                <div fxLayout="row" fxFlex="100">
+                                    <div fxFlex="30"><small>{{ t?.firstName + ' ' + t?.lastName }}</small></div>
+                                    <span fxFlex></span>
+                                    <div fxFlex="40"><small> {{ t?.occupation }}</small></div>
+                                    <span fxFlex></span>
+                                    <small class="text-muted mr-1">  {{ t?.latest_activity | date:'dd-MM-yyyy @ HH:mm' }}
+                                </small>
+                                </div>
+                            </mat-list-item>
+                        </mat-list>
+                        <div class="text-center">
+                            <button mat-button class="full-width" (click)="viewAllInbox()">View all</button>
+                        </div>
+                        <mat-divider></mat-divider>
+                    </div>
+                </mat-sidenav-content>
+                <!-- Left sidebar -->
+                <mat-sidenav style="width:400px" class="chat-sidenav" #chatSidebar [opened]="isSidenavOpen" mode="over" position="end">
+                    <div class="chats-wrap">
+                        <!-- Right side topbar -->
+                        <mat-progress-bar mode="indeterminate" *ngIf='chatLoading'></mat-progress-bar>
+                        <mat-toolbar color="primary" class="chat-toolbar mb-1">
+
+
+                            <!-- Selected active user -->
+                            <div class="active-chat-user" fxLayout="row" fxLayoutAlign="start center">
+
+                                <div *ngIf="!currentCon.firstName" fxLayout="column">
+                                    <h6 class="m-0 font-normal fz-1">Messenger</h6>
+
+                                </div>
+                                <a *ngIf="currentCon" class="toolbar-avatar mr-1">
+                                    <img [src]="currentCon.picture" alt="">
+
+                                </a>
+                                <div fxLayout="column" *ngIf="currentCon.firstName!=undefined">
+                                    <h6 class="m-0 font-normal fz-1">{{currentCon.firstName + ' '+ currentCon.lastName}}</h6>
+                                </div>
+                            </div>
+
+
+                            <!-- Right side top menu -->
+                            <span fxFlex></span>
+
+                        </mat-toolbar>
+
+                        <!-- Main chat body -->
+                        <div class="conversations-hold">
+
+                            <!-- single chat item -->
+                            <div *ngFor="let msg of chatMessages">
+                                <div class="single-conversation sender" *ngIf="msg.sender=='Me'" fxLayout="row">
+                                    <div>
+                                        <h5 class="chat-username text-muted">Me</h5>
+                                        <div class="conversation-msg">
+                                            {{msg.text}}
+                                        </div>
+                                        <p class="chat-date text-muted">{{(msg.createdAt ) |date:'short'}}</p>
+                                    </div>
+                                </div>
+                                <div class="single-conversation me" *ngIf="msg.sender=='To'" fxLayout="row">
+                                    <div>
+
+                                        <h5 class="chat-username text-muted">{{currentCon.firstName + ' '+currentCon.lastName}}</h5>
+                                        <div class="conversation-msg">
+                                            {{msg.text}}
+                                        </div>
+                                        <p class="chat-date text-muted">{{(msg.createdAt ) |date:'short'}}</p>
+                                    </div>
+                                </div>
+                                <div class="single-conversation me" *ngIf="msg.sender=='In'" fxLayout="row">
+                                    <div>
+                                        <h5 class="chat-username text-muted text-sm mat-color-primary">{{currentCon.firstName + ' '+currentCon.lastName}} is now connected</h5>
+
+                                        <p class="chat-date text-muted mat-color-primary">{{(msg.createdAt ) |date:'short'}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <mat-divider></mat-divider>
+
+                        <!-- Input box and send button -->
+                        <div class="chat-input-actions" fxLayout="row">
+                            <mat-form-field class="full-width mr-1">
+                                <input matInput [(ngModel)]="msgToSend" placeholder="Type your message" value="">
+                            </mat-form-field>
+                            <button mat-fab color="primary" (click)="msgSend()"><mat-icon>send</mat-icon></button>
+                        </div>
+
+                    </div>
+                </mat-sidenav>
+
+            </mat-sidenav-container>
+
+
+
+
+        </mat-card>
+    </div>
+    <div fxFlex="100" fxFlex.gt-sm="66.66" fxLayout="column" fxLayoutWrap="wrap">
+        <mat-card class="p-0">
+            <mat-card-title>
+                <div class="card-title-text"><b>Communication Statistics</b></div>
+            </mat-card-title>
+            <mat-card-content class="p-1">
+
+                <div style="display:block;position:relative;width:100%">
+                    <chart style='display:block; width: 100% !important;' type="StockChart" [options]="chartOptions"></chart>
+                </div>
+            </mat-card-content>
+        </mat-card>
+
+        <mat-card class="default">
+            <mat-card-title>
+                <b>Messenger Campaigns</b>
+            </mat-card-title>
+            <mat-divider></mat-divider>
+            <mat-card-content class="p-0">
+                <mat-list class="compact-list">
+                    <mat-list-item>
+                        <div class="full-width">Name <span class="pull-right">Replied</span><span class="pull-right">Contacts</span><span class="pull-right">Status</span></div>
+                        <mat-divider></mat-divider>
+                    </mat-list-item>
+                    <mat-list-item *ngFor="let item of messengers">
+                        <div class="full-width">{{item.name}} <span class="pull-right">{{item.rcount}}</span><span class="pull-right">{{item.ccount}}</span><span class="pull-right">{{item.status}}</span></div>
+                        <mat-divider></mat-divider>
+                    </mat-list-item>
+                </mat-list>
+            </mat-card-content>
+        </mat-card>
+
+        <mat-card class="default">
+            <mat-card-title>
+                <b>Connector Campaigns</b>
+            </mat-card-title>
+            <mat-divider></mat-divider>
+            <mat-card-content class="p-0">
+                <mat-list class="compact-list">
+                    <mat-list-item>
+                        <div class="full-width">Name <span class="pull-right">Invites</span><span class="pull-right">Connected</span><span class="pull-right">Contacts</span><span class="pull-right">Status</span></div>
+                        <mat-divider></mat-divider>
+                    </mat-list-item>
+                    <mat-list-item *ngFor="let item of connectors">
+                        <div class="full-width">{{item.name}} <span class="pull-right">{{item.cinvites}}</span><span class="pull-right">{{item.cconnected}}</span><span class="pull-right">{{item.cconnection}}</span><span class="pull-right">{{item.status}}</span></div>
+                        <mat-divider></mat-divider>
+                    </mat-list-item>
+                </mat-list>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>

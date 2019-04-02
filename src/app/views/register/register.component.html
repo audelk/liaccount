@@ -1,0 +1,65 @@
+<div class="page-wrap height-100 mat-bg-primary">
+
+    <div class="session-form-hold">
+        <div *ngIf="isLoading">
+            <mat-progress-bar [mode]="progressMode" [value]="done"></mat-progress-bar>
+        </div>
+
+        <mat-card>
+            <mat-card-content>
+
+                <div class="text-center pb-1">
+                    <img src="assets/images/logo-full.png" alt="" class="mb-05">
+                    <p class="text-muted m-0">Sign Up</p>
+                </div>
+                <div *ngFor="let item of data.errors" class="p-1 mb-1 mat-bg-warn">
+                    {{lang.trans(item)}}
+                </div>
+                <div *ngFor="let item of data.successes" class="p-1 mb-1 mat-bg-accent">
+                    {{lang.trans(item)}}
+                </div>
+                <form [formGroup]="signup" (ngSubmit)="doSignUp()" *ngIf='!data.status'>
+                    <div class="">
+                        <mat-form-field class="full-width">
+                            <input matInput name="user_name" [formControl]="signup.controls['user_name']" placeholder="Username" value="">
+                        </mat-form-field>
+                        <small *ngIf="signup.controls['user_name'].invalid && signup.controls['user_name'].touched" class="form-error-msg">
+                        <span *ngIf="signup.controls['user_name'].errors.required"> Username Required.</span>
+                        <span *ngIf="signup.controls['user_name'].errors.minlength">Username must be atleast  8 characters long.</span>
+                        <span *ngIf="signup.controls['user_name'].errors.pattern">Invalid characters detected.</span></small>
+
+                    </div>
+                    <div class="">
+                        <mat-form-field class="full-width">
+                            <input type="email" name="email" matInput [formControl]="signup.controls['email']" placeholder="Email" value="">
+                        </mat-form-field>
+                        <small *ngIf="signup.controls['email'].invalid && signup.controls['password'].touched" class="form-error-msg">
+                        <span *ngIf="signup.controls['email'].errors.required"> Email Required.</span>
+                        <span *ngIf="signup.controls['email'].errors.minlength">Email must be atleast  5 characters long.</span>
+                        <span *ngIf="signup.controls['email'].errors.pattern">Invalid characters detected.</span></small>
+
+                    </div>
+                    <div class="">
+                        <mat-form-field class="full-width">
+                            <input type="password" name="password" matInput [formControl]="signup.controls['password']" placeholder="Password" value="">
+                        </mat-form-field>
+                        <small *ngIf="signup.controls['password'].invalid && signup.controls['password'].touched" class="form-error-msg">
+                        <span *ngIf="signup.controls['password'].errors.required"> Password Required.</span>
+                        <span *ngIf="signup.controls['password'].errors.minlength">Password must be atleast  8 characters long.</span>
+                        <span *ngIf="signup.controls['password'].errors.pattern">Invalid characters detected.</span></small>
+
+                    </div>
+
+
+                    <button mat-raised-button class="mat-primary full-width mb-1" [disabled]="signup.invalid">Sign Up</button>
+
+                </form>
+                <div>
+                    <a [routerLink]="'/login'" class="mat-primary text-center full-width">Login</a>
+                    <span fxFlex></span>
+
+                </div>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>

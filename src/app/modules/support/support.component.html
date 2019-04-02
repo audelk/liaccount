@@ -1,0 +1,21 @@
+<h4 class="full-width">{{pageTitle}}</h4>
+<div fxLayout="row" fxLayoutWrap="wrap" class="mt-1">
+
+
+    <div fxLayout="column" *ngFor="let item of items">
+        <mat-card class="example-card">
+            <mat-card-header>
+                <mat-card-title>{{item.title}}</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+                <iframe style="border-width:0px" [src]="item.url | safe" width="item.width" height="item.height"></iframe>
+
+            </mat-card-content>
+
+        </mat-card>
+
+
+    </div>
+
+
+</div>

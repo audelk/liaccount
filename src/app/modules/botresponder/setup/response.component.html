@@ -1,0 +1,91 @@
+<div fxLayout="row" fxLayoutWrap="wrap" *ngIf="items!=undefined">
+
+    <!-- first message -->
+    <div fxLayout="column" *ngFor="let item of items.recordsFirstMessage" fxFlex="100" fxFlex.gt-md="50">
+        <mat-card class="user-card p-0">
+            <mat-card-title class="bg-white">
+                <div class="card-title-text">
+                    <a href="" matTooltip="Message" class="toolbar-avatar md mr-1">
+                        <mat-icon class="" style='font-size: 50px;'>note</mat-icon>
+                    </a>
+                    <span>
+                        First Message
+                      <br>                   
+                      </span>
+                    <span fxFlex></span>
+                    <button mat-icon-button [matMenuTriggerFor]="userMenu" class="">
+              <mat-icon class="">more_vert</mat-icon>
+          </button>
+                    <mat-menu #userMenu="matMenu">
+                        <button mat-menu-item (click)="edit(item.id,'recordsFirstMessage')">Edit</button>
+
+                    </mat-menu>
+                </div>
+                <mat-divider></mat-divider>
+            </mat-card-title>
+            <mat-card-content>
+                <div class="m-1 p-1 mat-bg-accent" *ngIf="item.message==''">
+                    First message is empty. You need to input a welcome message. Click button in the right to edit.
+                </div>
+                {{item.message}}
+            </mat-card-content>
+        </mat-card>
+    </div>
+    <div fxLayout="column" fxFlex="100" fxFlex.gt-md="50">
+        <div class="m-1">
+            Use the following tags in place of an individual's details to create a more personalized message.
+            <BR>
+            <BR>
+            <B>Name</B> = <span class="mat-color-primary">{{ '{Name}' }} </span>
+            <BR>
+            <B>FirstName</B> = <span class="mat-color-primary">{{ '{FirstName}' }}  </span>
+            <BR>
+            <B>Title</B> = <span class="mat-color-primary">{{ '{Title}' }} </span>
+            <BR>
+            <B>Company Name</B> = <span class="mat-color-primary">{{ '{Company}' }}</span>
+            <BR>
+
+        </div>
+    </div>
+</div>
+<div fxLayout="row">
+    <div fxFlex class="p-0">
+        <button (click)="openNewDialog()" mat-raised-button color="primary" class='mt-1 mb-1'> Add Follow Up</button>
+    </div>
+</div>
+<div fxLayout="row" fxLayoutWrap="wrap" *ngIf="items!=undefined">
+    <div fxLayout="column" *ngFor="let item of items.recordsFollowUp;let i=index" fxFlex="100" fxFlex.gt-md="50">
+        <mat-card class="user-card p-0">
+            <mat-card-title class="bg-white">
+                <div class="card-title-text">
+                    <a href="" matTooltip="Message" class="toolbar-avatar md mr-1">
+                        <mat-icon class="" style='font-size: 50px;'>note</mat-icon>
+                    </a>
+                    <span>
+                        Follow up {{i + 1}}
+                      <br>
+                   <small>
+                          {{res.data.model.countdown_to_send.attr.values[item.countdown_to_send]}}
+                       
+
+                      </small>
+                      </span>
+
+                    <span fxFlex></span>
+                    <button mat-icon-button [matMenuTriggerFor]="userMenu" class="">
+              <mat-icon class="">more_vert</mat-icon>
+          </button>
+                    <mat-menu #userMenu="matMenu">
+                        <button mat-menu-item (click)="edit(item.id,'recordsFollowUp')">Edit</button>
+                        <button mat-menu-item (click)="delete(item.id)">Delete</button>
+                    </mat-menu>
+                </div>
+                <mat-divider></mat-divider>
+            </mat-card-title>
+            <mat-card-content>
+                {{item.message}}
+            </mat-card-content>
+        </mat-card>
+    </div>
+
+</div>

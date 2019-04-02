@@ -1,0 +1,451 @@
+    /*
+ *
+ *   EGRET - Angular Material Design Admin Template
+ *
+ *
+*/
+    
+    // Third pirty style files
+    // Scroll
+    @import '~perfect-scrollbar/css/perfect-scrollbar.css';
+    // // Data Table
+    @import '~@swimlane/ngx-datatable/release/index.css';
+    @import '~@swimlane/ngx-datatable/release/themes/material.css';
+    @import '~@swimlane/ngx-datatable/release/assets/icons.css';
+    // // Rich Text Editor
+    // @import '~quill/dist/quill.core.css';
+    // @import '~quill/dist/quill.snow.css';
+    // // Drag and Drop
+    // @import '~dragula/dist/dragula.css';
+    // // Calendar
+    // @import '~angular-calendar/dist/css/angular-calendar.css';
+    // // User tour
+    // @import '~hopscotch/dist/css/hopscotch.min.css';
+    // Page loader Topbar
+    @import '../../vendor/pace/pace-theme-min.css';
+    // Main Variables File
+    @import "scss/variables";
+    // Open _themes.scss and remove unnecessary theme files
+    @import "scss/themes";
+    // Open _main.scss and keep files which are required for your current layout.
+    @import "scss/main";
+    // Open _views.scss and remove unnecessary view related files
+    @import "scss/views";
+    .hbContainer {
+        margin: 20px !important;
+        font-size: 20px
+    }
+    
+    .hbValue {
+        width: 260px;
+        display: inline-block;
+        text-align: center;
+        margin: 2px
+    }
+    
+    .hbLabel {
+        width: 212px;
+        display: inline-block;
+    }
+    
+    .search-bar .top-search-form {
+        position: relative;
+        background: #fff;
+        border-radius: 2px;
+        margin-right: 1rem;
+        display: block;
+        max-width: 800px;
+        margin-left: 20px;
+        margin-left: 7px;
+        margin-top: .4rem;
+    }
+    
+    .search-bar .top-search-form .material-icons {
+        position: absolute;
+        top: 50%;
+        left: 10px;
+        margin-top: -12px;
+        color: rgba(0, 0, 0, .87);
+    }
+    
+    .search-bar .top-search-form input {
+        font-size: 1rem;
+        padding: .55rem;
+        z-index: 2;
+        cursor: text;
+        text-indent: 30px;
+        border: none;
+        background: transparent;
+        width: 100%;
+        outline: 0;
+    }
+    
+    .app-admin-container.navigation-top .rightside-content-hold {
+        max-width: 100% !important
+    }
+    
+    form {
+        max-width: 750px
+    }
+    
+    #maxwidth {
+        max-width: 100% !important
+    }
+    
+    .profile-width {
+        max-width: 100%
+    }
+    
+    .bgcolor-invite_sent,
+    .bgcolor-cancelled,
+    .bgcolor-no_sub_data {
+        color: #fff !important;
+        padding: 3px;
+        background-color: #d50000 !important;
+    }
+    
+    .bgcolor-disconnected,
+    .bgcolor-import_error {
+        background-color: #c51162 !important;
+        color: #aaa !important;
+    }
+    
+    .bgcolor-connected,
+    .bgcolor-done {
+        background-color: #3949ab !important;
+        color: #aaa !important;
+    }
+    
+    .bgcolor-in_queue {
+        background-color: #aa00ff !important;
+        color: #aaa !important;
+    }
+    
+    .bgcolor-message {
+        background-color: #6200ea !important;
+        color: #aaa !important;
+    }
+    
+    .bgcolor-ignore {
+        background-color: #333 !important;
+        color: #aaa !important;
+    }
+    
+    .bgcolor-replied {
+        background-color: #2962ff !important;
+        color: #aaa !important;
+    }
+    
+    .bgcolor-chatting {
+        background-color: #00897b !important;
+        color: #999 !important;
+    }
+    
+    .bgcolor-first_message {
+        background-color: #2e7d32 !important;
+        color: #aaa !important;
+    }
+    
+    .bgcolor-imported {
+        background-color: #455a64 !important;
+        color: #aaa !important;
+    }
+    
+    .bgcolor-old_connection {
+        background-color: #757575 !important;
+        color: #aaa !important;
+    }
+    
+    .bgcolor-follow_up {
+        background-color: #d84315 !important;
+        color: #aaa !important;
+    }
+    
+    .bgcolor-welcome_message,
+    .bgcolor-processing {
+        color: #666 !important;
+        background-color: #fb8c00 !important;
+    }
+    
+    .fontcolor-invite_sent {
+        color: #aaa !important;
+    }
+    
+    .fontcolor-disconnected,
+    .fontcolor-import_error {
+        color: #c51162 !important;
+    }
+    
+    .fontcolor-connected,
+    .fontcolor-done {
+        color: #3949ab !important;
+    }
+    
+    .fontcolor-in_queue {
+        color: #aa00ff !important;
+    }
+    
+    .fontcolor-message {
+        color: #6200ea !important;
+    }
+    
+    .fontcolor-ignore {
+        color: #333 !important;
+    }
+    
+    .fontcolor-cancelled,
+    .fontcolor-no_sub_data {
+        color: #333 !important;
+    }
+    
+    .fontcolor-replied {
+        color: #2962ff !important;
+    }
+    
+    .fontcolor-active {
+        font-weight: bold;
+        color: #2962ff !important;
+    }
+    
+    .fontcolor-chatting {
+        color: #00897b !important;
+    }
+    
+    .fontcolor-first_message {
+        color: #2e7d32 !important;
+    }
+    
+    .fontcolor-imported {
+        color: #455a64 !important;
+    }
+    
+    .fontcolor-old_connection {
+        color: #757575 !important;
+    }
+    
+    .fontcolor-follow_up {
+        color: #d84315 !important;
+    }
+    
+    .fontcolor-trialing {
+        font-weight: bold;
+        color: #d84315 !important;
+    }
+    
+    .fontcolor-welcome_message,
+    .fontcolor-processing {
+        color: #fb8c00 !important;
+    }
+    
+    .datatable-body-row {
+        cursor: pointer !important;
+    }
+    
+    .conversations-hold {
+        max-height: 300px;
+        overflow-y: scroll;
+    }
+    
+    .search-tab-group {
+        border: 1px solid #e8e8e8;
+    }
+    /** 
+ *  icon animate
+*/
+    
+    .fa-spin {
+        -webkit-animation: fa-spin 2s infinite linear;
+        animation: fa-spin 2s infinite linear;
+    }
+    
+    .fa-pulse {
+        -webkit-animation: fa-spin 1s infinite steps(8);
+        animation: fa-spin 1s infinite steps(8);
+    }
+    
+    .hide {
+        display: none !important
+    }
+    
+    @-webkit-keyframes fa-spin {
+        0% {
+            -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+        }
+        100% {
+            -webkit-transform: rotate(359deg);
+            transform: rotate(359deg);
+        }
+    }
+    
+    @keyframes fa-spin {
+        0% {
+            -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+        }
+        100% {
+            -webkit-transform: rotate(359deg);
+            transform: rotate(359deg);
+        }
+    }
+    
+    .title1:first-letter {
+        text-transform: uppercase;
+    }
+    
+    .button-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+    }
+    
+    .p-05 {
+        padding: 5px !important
+    }
+    
+    .unread-message {
+        font-weight: bold !important;
+        color: #000;
+    }
+    
+    .notification-number {
+        right: 0px !important;
+        top: 12px !important;
+        left: auto !important;
+    }
+    
+    .pull-right {
+        float: right;
+        width: 100px
+    }
+    
+    .pull-left {
+        position: absolute;
+        left: 10px;
+        right: auto
+    }
+    
+    .highcharts-scrollbar {
+        display: none !important
+    }
+    
+    .example.example1 * {
+        font-family: Roboto, Open Sans, Segoe UI, sans-serif;
+        font-size: 16px;
+        font-weight: 500;
+    }
+    
+    .example.example1 fieldset {
+        margin: 0 15px 20px;
+        padding: 0;
+        border-style: none;
+        background-color: #7795f8;
+        box-shadow: 0 6px 9px rgba(50, 50, 93, 0.06), 0 2px 5px rgba(0, 0, 0, 0.08), inset 0 1px 0 #829fff;
+        border-radius: 4px;
+    }
+    
+    .example.example1 .row {
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-align: center;
+        align-items: center;
+        margin-left: 15px;
+    }
+    
+    .example.example1 .row+.row {
+        border-top: 1px solid #819efc;
+    }
+    
+    .example.example1 label {
+        width: 15%;
+        min-width: 70px;
+        padding: 11px 0;
+        color: #c4f0ff;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    
+    .example.example1 input,
+    .example.example1 button {
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        outline: none;
+        border-style: none;
+    }
+    
+    .example.example1 input:-webkit-autofill {
+        -webkit-text-fill-color: #fce883;
+        transition: background-color 100000000s;
+        -webkit-animation: 1ms void-animation-out;
+    }
+    
+    .example.example1 .StripeElement--webkit-autofill {
+        background: transparent !important;
+    }
+    
+    .example.example1 .StripeElement {
+        width: 100%;
+        padding: 11px 15px 11px 0;
+    }
+    
+    .example.example1 input {
+        width: 100%;
+        padding: 11px 15px 11px 0;
+        color: #fff;
+        background-color: transparent;
+        -webkit-animation: 1ms void-animation-out;
+    }
+    
+    .example.example1 input::-webkit-input-placeholder {
+        color: #87bbfd;
+    }
+    
+    .example.example1 input::-moz-placeholder {
+        color: #87bbfd;
+    }
+    
+    .example.example1 input:-ms-input-placeholder {
+        color: #87bbfd;
+    }
+    
+    .example.example1 .error svg .base {
+        fill: #fff;
+    }
+    
+    .example.example1 .error svg .glyph {
+        fill: #6772e5;
+    }
+    
+    .example.example1 .error .message {
+        color: #fff;
+    }
+    
+    .example.example1 .success .icon .border {
+        stroke: #87bbfd;
+    }
+    
+    .example.example1 .success .icon .checkmark {
+        stroke: #fff;
+    }
+    
+    .example.example1 .success .title {
+        color: #fff;
+    }
+    
+    .example.example1 .success .message {
+        color: #9cdbff;
+    }
+    
+    .example.example1 .success .reset path {
+        fill: #fff;
+    }
+    
+    .mat-step-label {
+        white-space: unset !important;
+    }
+    
+    .mat-color-accent {
+        color: #ffc107 !important
+    }

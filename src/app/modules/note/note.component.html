@@ -1,0 +1,41 @@
+<div fxLayout="row" fxLayoutAlign="space-between ">
+    <div fxFlex>
+        <button (click)="openNewDialog()" mat-raised-button color="primary" class='margin-333'><mat-icon class="">note_add</mat-icon> New Note</button>
+    </div>
+
+
+</div>
+<div fxLayout="row" fxLayoutWrap="wrap">
+    <div fxFlex="100" *ngFor="let item of res.errors" class="p-1 margin-333 pr-1 mat-bg-warn">
+        {{lang.trans(item)}}
+    </div>
+    <div fxFlex="100" *ngFor="let item of res.successes" class="p-1 margin-333 mat-bg-accent">
+        {{lang.trans(item)}}
+    </div>
+
+    <div fxLayout="column" *ngFor="let user of res.data.records" fxFlex="100" fxFlex.gt-md="50">
+        <mat-card class="user-card p-0">
+            <mat-card-title class="bg-white">
+                <div class="card-title-text">
+                    <span>
+                        <small>{{user.user_name}}<BR>
+                        {{user.submitted}}</small></span>
+                    <span fxFlex></span>
+                    <button mat-icon-button [matMenuTriggerFor]="userMenu" class="">
+              <mat-icon class="">more_vert</mat-icon>
+          </button>
+                    <mat-menu #userMenu="matMenu">
+                        <button mat-menu-item (click)="edit(user.id)">Edit</button>
+                        <button mat-menu-item (click)="delete(user.id)">Delete</button>
+                    </mat-menu>
+                </div>
+                <mat-divider></mat-divider>
+            </mat-card-title>
+            <mat-card-content>
+                <p>
+                    {{user.note}}
+                </p>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>

@@ -1,0 +1,71 @@
+<div fxLayout="row" fxLayoutAlign="space-between ">
+    <div fxFlex>
+        <button (click)="openNewDialog()" mat-raised-button color="primary" class='margin-333'><mat-icon class="">credit_card</mat-icon> New Prospect</button>
+    </div>
+    <div fxFlex class="search-bar">
+
+        <form class="top-search-form mat-box-shadow">
+            <mat-icon role="img">search</mat-icon>
+            <input autofocus="true" placeholder="Search Accounts" type="text" (keyup)='updateFilter($event)'>
+        </form>
+    </div>
+
+</div>
+<div fxLayout="row" fxLayoutWrap="wrap">
+    <div fxLayout="column" fxFlex="100">
+        <div *ngFor="let item of res.errors" class="p-1 margin-333 pr-1 mat-bg-warn">
+            {{lang.trans(item)}}
+        </div>
+        <div *ngFor="let item of res.successes" class="p-1 margin-333 mat-bg-accent">
+            {{lang.trans(item)}}
+        </div>
+    </div>
+    <div *ngIf="accountLoaded==false" class="m-1" fxFlex="100">
+        <mat-progress-bar mode="indeterminate" class="session-progress"></mat-progress-bar>
+    </div>
+</div>
+<mat-card class="p-1">
+    <mat-card-content class="p-0">
+        <ngx-datatable [selectAllRowsOnPage]="false" #table class="material ml-0 mr-0" [rows]="res.data.records" [columnMode]="'force'" [headerHeight]="50" [footerHeight]="50" [limit]="10" [rowHeight]="'auto'">
+
+
+            <ngx-datatable-column name="Email" [flexGrow]="1" prop="email">
+                <ng-template let-row="row" ngx-datatable-cell-template>
+                    {{ row.email}}
+                </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column name="Name" [flexGrow]="1" prop="name">
+                <ng-template let-row="row" ngx-datatable-cell-template><small>
+                    {{row.name}}</small>
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Remarks" [flexGrow]="1" prop="remarks">
+                <ng-template let-row="row" ngx-datatable-cell-template><small>
+                    {{row.remarks}}</small>
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Registration" [flexGrow]="1" prop="registration_type">
+                <ng-template let-row="row" ngx-datatable-cell-template><small>
+                    {{row.registration_type}}</small>
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Date" [canAutoResize]="false" [width]="200" prop="date">
+                <ng-template let-row="row" ngx-datatable-cell-template>
+                    {{row.date!=0? (row.date*1000 | date:'dd-MM-yyyy'): "" }}
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Action" [canAutoResize]="false" [width]="200">
+                <ng-template let-row="row" ngx-datatable-cell-template>
+
+                    <button mat-icon-button color="primary" (click)="edit(row.id)" matTooltip="Edit">
+                        <mat-icon >edit</mat-icon>
+                     </button>
+                    <button mat-icon-button color="warn" (click)="delete(row.id)" matTooltip="Delete">
+                         <mat-icon >delete</mat-icon>
+                </button>
+                </ng-template>
+            </ngx-datatable-column>
+        </ngx-datatable>
+    </mat-card-content>
+</mat-card>

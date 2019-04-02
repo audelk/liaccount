@@ -1,0 +1,93 @@
+<div fxLayout="row" fxLayoutWrap="wrap">
+    <div *ngIf="loadingItems" class="m-1" fxFlex="100">
+        <mat-progress-bar mode="indeterminate" class="session-progress"></mat-progress-bar>
+    </div>
+    <div fxFlex="100" fxFlex.gt-sm="80" fxFlex.gt-md="calc(100% - 300px)">
+        <div fxLayout="row" fxLayoutAlign="space-between ">
+            <div fxFlex>
+                <button [disabled]="modelConnector==undefined" (click)="addSelectedToConnector()" mat-raised-button color="primary" class='margin-333'>Add selected contacts to Connector Campaign</button>
+                <button [disabled]="modelConnector==undefined" (click)="addAllToConnector()" mat-raised-button color="primary" class='margin-333'>Add all contacts to Connector Campaign</button>
+                <button [disabled]="modelConnector==undefined" (click)="addAllToResponder()" mat-raised-button class='margin-333 bgcolor-welcome_message '>Add all contacts to Messenger Campaign</button>
+                <button [disabled]="modelConnector==undefined" (click)="download()" mat-raised-button color="primary" class='margin-333' matTooltip="Download as CSV"><mat-icon>file_download</mat-icon></button>
+
+            </div>
+
+            <div fxFlex class="search-bar">
+
+                <form class="top-search-form mat-box-shadow" style="margin-right: 5px;">
+                    <mat-icon role="img">search</mat-icon>
+                    <input autofocus="true" placeholder="Search connections" type="text" (keyup)='updateFilter($event)'>
+                </form>
+            </div>
+        </div>
+        <mat-card class="p-0">
+
+            <mat-card-content class="p-0">
+                <ngx-datatable [selected]="selected" [selectionType]="'checkbox'" [selectAllRowsOnPage]="false" (activate)="onActivate($event)" (select)='onSelect($event)' #table class="material ml-0 mr-0" [rows]="items" [columnMode]="'force'" [headerHeight]="50" [footerHeight]="50"
+                    [limit]="10" [rowHeight]="'auto'">
+
+                    <ngx-datatable-column [name]="'checkCol'" [width]="50" [sortable]="false" [canAutoResize]="false" [draggable]="false" [resizeable]="false">
+
+                        <ng-template ngx-datatable-cell-template let-row="row" let-value="value" let-isSelected="isSelected" let-onCheckboxChangeFn="onCheckboxChangeFn">
+
+                            <mat-checkbox *ngIf="row.status=='imported'  && row.cNames==undefined " [checked]="isSelected" (change)="onCheckboxChangeFn($event)"></mat-checkbox>
+                        </ng-template>
+                    </ngx-datatable-column>
+
+                    <ngx-datatable-column name="Name" [flexGrow]="1">
+                        <ng-template let-row="row" ngx-datatable-cell-template>
+                            <a class="toolbar-avatar md mr-1"><img src="{{row.picture || userSvc.noPicture}}" alt=""></a>
+
+                            {{ (row.firstName + ' ' + row.lastName )==" "? row?.formattedName : (row.firstName + ' ' + row.lastName ) }}
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column name="Title" [flexGrow]="1">
+                        <ng-template let-row="row" ngx-datatable-cell-template>
+                            <div [innerHTML]="row?.title || row?.occupation"></div>
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column name="Company" [flexGrow]="1">
+                        <ng-template let-row="row" ngx-datatable-cell-template>
+                            {{ row?.company }}
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column name="Location" [flexGrow]="1">
+                        <ng-template let-row="row" ngx-datatable-cell-template>
+                            {{ row?.location }}
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column name="Campaign" [flexGrow]="1">
+                        <ng-template let-row="row" ngx-datatable-cell-template>
+                            {{ row?.cNames }}
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column name="Status" [canAutoResize]="false" [width]="200">
+                        <ng-template let-column="column" ngx-datatable-header-template>
+                            <mat-form-field>
+                                <mat-select placeholder="State" [(value)]="statusFiltersSelected" (selectionChange)="onStatusFilterChange($event)">
+                                    <mat-option *ngFor="let status of statusFilters" [value]="status.value">
+                                        {{status.viewValue}}
+                                    </mat-option>
+                                </mat-select>
+                                <mat-label><b>Status</b></mat-label>
+                            </mat-form-field>
+                        </ng-template>
+                        <ng-template let-row="row" ngx-datatable-cell-template>
+                            <div class="button-row">
+                                <!-- <button [hidden]="row.status=='invite_sent'" matTooltip="Send invite" (click)="sendInvite(row,$event)" mat-icon-button color="primary" class='margin-333'><mat-icon>person_add</mat-icon></button>-->
+                                <button *ngIf="row.status=='imported' && row.cNames==undefined" (click)="addToCampaign(row)" mat-raised-button color="primary" class='margin-333'>Add to Campaign</button>
+                                <div *ngIf="row.status!='imported'" class="full-width  bgcolor-{{row.status}} text-center p-05">
+                                    {{ row?.status }}
+                                </div>
+                                <div *ngIf="row.status=='imported' && row.cNames!=undefined" class="full-width  bgcolor-{{row.status}} text-center p-05">
+                                    {{ row?.status }}
+                                </div>
+                            </div>
+                        </ng-template>
+                    </ngx-datatable-column>
+                </ngx-datatable>
+            </mat-card-content>
+        </mat-card>
+    </div>
+
+</div>

@@ -1,0 +1,32 @@
+<div class="page-wrap height-100 mat-bg-primary">
+    <div class="session-form-hold">
+        <mat-progress-bar mode="determinate" class="session-progress"></mat-progress-bar>
+        <mat-card>
+            <mat-card-content>
+                <div class="text-center pb-1">
+                    <img src="assets/images/logo-full.png" alt="" class="mb-05">
+
+                </div>
+                <div *ngFor="let item of data.errors" class="p-1 mb-1 mat-bg-warn" role="alert">
+                    {{lang.trans(item)}}
+                </div>
+                <div *ngFor="let item of data.successes" class="p-1 mb-1 mat-bg-accent" role="alert">
+                    {{lang.trans(item)}}
+                </div>
+                <div *ngIf="!passwordUpdated">
+                    <dynamic-form [isLoading]='isLoading' [formOpts]="formOptions" [submitText]="formModels.newPassword.submitText" [fields]="formModels.newPassword.fields" (formSubmit)="onSubmit($event)"></dynamic-form>
+                </div>
+
+                <div *ngIf="tk==false" class="p-1 mb-1 mat-bg-accent" role="alert">
+                    Your reset token has expired. Request a link again.
+                    <a [routerLink]="'/forgot-password'" class="mat-primary text-center full-width">Sign in</a>
+                    <span fxFlex></span>
+                </div>
+                <div>
+                    <a [routerLink]="'/signin'" class="mat-primary text-center full-width">Sign in</a>
+                    <span fxFlex></span>
+                </div>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>

@@ -1,0 +1,11 @@
+<div matDialogTitle class="">
+    <span>{{opts.title}}</span>
+    <button mat-icon-button matDialogClose style="float:right">
+    <mat-icon aria-label="Example icon-button with a heart icon">close</mat-icon>
+  </button>
+
+</div>
+
+<demo-file-upload [additionalParameter]="additionalParameter" [submitText]="opts.submitText" [url]="url" [queueLimit]="queueLimit" [isHTML5]="isHTML5" [authToken]="authToken" [additionalParameter]="additionalParameter" [isLoading]="isLoading" (formSubmit)="onSubmit($event)">
+
+</demo-file-upload>

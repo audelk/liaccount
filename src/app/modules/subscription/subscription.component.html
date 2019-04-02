@@ -1,0 +1,116 @@
+<div fxLayout="row" fxLayoutWrap="wrap">
+
+
+    <!-- Pricing box -->
+    <div fxLayout="column" fxFlex="100">
+        <mat-progress-bar mode="indeterminate" *ngIf='purchasing'></mat-progress-bar>
+    </div>
+    <div fxLayout="column" fxFlex="100" fxFlex.gt-md="33" *ngFor="let item of items ">
+        <mat-card class="plan-pricing text-center p-0">
+            <mat-card-title class="light-gray">
+                <div class="card-title-text">
+                    <div class="">{{item.name}}</div>
+                    <div class="text-sm ">{{item.settings.maxSets}} Linkedin Accounts</div>
+                </div>
+                <mat-divider></mat-divider>
+            </mat-card-title>
+            <mat-card-content>
+                <h1 *ngIf="item.settings.trial"><strong>FREE</strong></h1>
+                <h1 *ngIf="!item.settings.trial"><strong>${{item.amount}}/{{item.settings.subType}}</strong></h1>
+                <mat-list dense class="mb-1">
+                    <mat-list-item *ngIf="item.settings.connections.enabled">Connections import :
+                        <B>&nbsp; {{item.settings.connections.maxImport==-1?"ALL":item.settings.connections.maxImport}}</B>
+                    </mat-list-item>
+
+                    <mat-list-item>Max Searches :
+                        <B>&nbsp;{{item.settings.maxSearches}}</B>
+                    </mat-list-item>
+                    <mat-list-item>Max results per search :
+                        <B>&nbsp;{{ item.settings.maxSearchResults}}</B>
+                    </mat-list-item>
+                    <mat-list-item *ngIf="item.settings.messengerCampaign.enabled">Max messenger campaigns :
+                        <B>&nbsp;{{item.settings.messengerCampaign.maxCampaigns}}</B>
+                    </mat-list-item>
+                    <mat-list-item *ngIf="item.settings.connectorCampaign.enabled">Max connector campaigns :
+                        <B>&nbsp;{{item.settings.connectorCampaign.maxCampaigns}}</B>
+                    </mat-list-item>
+                    <mat-list-item *ngIf="item.settings.chat">
+                        Messenger/Chat Box
+                        <mat-icon class="mat-primary">check</mat-icon>
+                    </mat-list-item>
+                    <mat-list-item *ngIf="!item.settings.chat">
+                        Messenger/Chat Box
+                        <mat-icon class="mat-warn">clear</mat-icon>
+                    </mat-list-item>
+
+                    <mat-list-item *ngIf="item.settings.welcomeMessage">
+                        Welcome message
+                        <mat-icon class="mat-primary">check</mat-icon>
+                    </mat-list-item>
+                    <mat-list-item *ngIf="!item.settings.welcomeMessage">
+                        Welcome message
+                        <mat-icon class="mat-warn">clear</mat-icon>
+                    </mat-list-item>
+                    <mat-list-item *ngIf="item.settings.connectorCampaign.enabled && item.settings.connectorCampaign.customConnectMessage">
+                        Custom connect message
+                        <mat-icon class="mat-primary">check</mat-icon>
+                    </mat-list-item>
+                    <mat-list-item *ngIf="item.settings.connectorCampaign.enabled && !item.settings.connectorCampaign.customConnectMessage">
+                        Custom connect message
+                        <mat-icon class="mat-warn">clear</mat-icon>
+                    </mat-list-item>
+                    <mat-list-item *ngIf="item.settings.searchStandard.enabled">
+                        Standard search
+                        <mat-icon class="mat-primary">check</mat-icon>
+                    </mat-list-item>
+                    <mat-list-item *ngIf="!item.settings.searchStandard.enabled">
+                        Standard search
+                        <mat-icon class="mat-warn">clear</mat-icon>
+                    </mat-list-item>
+                    <mat-list-item *ngIf="item.settings.searchURL.enabled">
+                        Linkedin URL search
+                        <mat-icon class="mat-primary">check</mat-icon>
+                    </mat-list-item>
+                    <mat-list-item *ngIf="!item.settings.searchURL.enabled">
+                        Linkedin URL search
+                        <mat-icon class="mat-warn">clear</mat-icon>
+                    </mat-list-item>
+                    <mat-list-item *ngIf="item.settings.searchSalesNavigator.enabled">
+                        Sales Navigator URL search
+                        <mat-icon class="mat-primary">check</mat-icon>
+                    </mat-list-item>
+                    <mat-list-item *ngIf="!item.settings.searchSalesNavigator.enabled">
+                        Sales Navigator URL search
+                        <mat-icon class="mat-warn">clear</mat-icon>
+                    </mat-list-item>
+                    <mat-list-item *ngIf="item.settings.exportToCSV">
+                        CSV export
+                        <mat-icon class="mat-primary">check</mat-icon>
+                    </mat-list-item>
+                    <mat-list-item *ngIf="!item.settings.exportToCSV">
+                        CSV export
+                        <mat-icon class="mat-warn">clear</mat-icon>
+                    </mat-list-item>
+                </mat-list>
+
+                <button [disabled]="purchasing" *ngIf="item.status!='current' " (click)="choosePlan(item)" mat-raised-button class="mat-accent">Choose</button>
+                <div *ngIf="item.status=='current'" class="p-1 mb-1 mat-bg-primary">
+                    <b>Current Plan</b>
+                    <BR> {{item.start_date * 1000 | date}} - {{item.end_date * 1000 | date}}
+                    <BR>
+                    <div class="margin-333" *ngIf="item.cancelled==0">
+                        <a (click)="cancelSub(item)" class="m-1 mat-color-accent">Cancel Subscription</a>
+                    </div>
+                    <div class="margin-333" *ngIf="item.cancelled==1">
+                        This subscription was cancelled and will work until {{item.end_date * 1000 | date}}.
+                    </div>
+                </div>
+                <button class="mt-1" [disabled]="purchasing" *ngIf="item.status=='current' && item.cancelled==1" (click)="reChoosePlan(item)" mat-raised-button class="mat-accent">Choose</button>
+
+            </mat-card-content>
+        </mat-card>
+    </div>
+
+
+
+</div>

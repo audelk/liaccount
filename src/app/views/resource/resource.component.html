@@ -1,0 +1,27 @@
+<div fxLayout="row" fxLayoutWrap="wrap">
+    <div fxLayout="column" fxFlex="100" fxFlex.gt-md="100">
+        <mat-card class=" p-0">
+            <mat-card-title class="">
+                <div class="card-title-text">Resources</div>
+                <mat-divider></mat-divider>
+            </mat-card-title>
+
+            <mat-card-content class="p-0">
+
+
+                <mat-list>
+                    <mat-list-item *ngFor="let row of items">
+                        <mat-icon matListIcon>bookmark_border</mat-icon>
+                        <h3 matLine><a class="mat-color-primary" href="{{row.url}}" target="_blank"> {{ row?.title }}</a> </h3>
+                        <p matLine>
+
+                            <span class="demo-2">  {{ row?.date }} </span>
+                        </p>
+                    </mat-list-item>
+                </mat-list>
+
+
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>

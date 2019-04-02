@@ -1,0 +1,84 @@
+<div fxLayout="row" fxLayoutAlign="space-between ">
+
+
+
+</div>
+<div fxLayout="row" fxLayoutWrap="wrap">
+    <div fxLayout="column" *ngIf="accountLoaded" fxFlex="100">
+        <div *ngFor="let item of resn.errors" class="p-1 margin-333 pr-1 mat-bg-warn">
+            {{lang.trans(item)}}
+        </div>
+        <div *ngFor="let item of resn.successes" class="p-1 margin-333 mat-bg-accent">
+            {{lang.trans(item)}}
+        </div>
+    </div>
+    <div *ngIf="!accountLoaded" class="m-1" fxFlex="100">
+        {{accountProcessMsg}}
+        <mat-progress-bar mode="indeterminate" class="session-progress"></mat-progress-bar>
+    </div>
+
+
+</div>
+<mat-card class="p-0">
+    <mat-card-title>
+        <div class="card-title-text"><b>Accounts</b></div>
+    </mat-card-title>
+    <mat-card-content class="mt-1">
+        <ngx-datatable class="material ml-0 mr-0" [rows]="items" [columnMode]="'flex'" [headerHeight]="50" [footerHeight]="50" [limit]="50" [rowHeight]="'auto'">
+            <ngx-datatable-column name="Email" [width]="220" [canAutoResize]="false">
+                <ng-template let-row="row" ngx-datatable-cell-template>
+                    <a href="" routerLink="../../../inaccount/dashboard/{{row.id}}" matTooltip="Access Account" (click)="checkAccount(row.id)">
+                      {{ row.email }}</a>
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Name" prop='remarks' [flexGrow]="1">
+                <ng-template let-row="row" ngx-datatable-cell-template>
+                    {{ row.remarks }}
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Cncts" [flexGrow]="1" prop="cconnections">
+                <ng-template let-row="row" ngx-datatable-cell-template>
+                    {{ row.cconnections }}
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Invites 24hrs" [flexGrow]="1" prop="i24">
+                <ng-template let-row="row" ngx-datatable-cell-template>
+                    {{ row.i24 }}
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Conctd 72hrs" [flexGrow]="1" prop="c72">
+                <ng-template let-row="row" ngx-datatable-cell-template>
+                    {{ row.c72 }}
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Conctd 30days" [flexGrow]="1" prop="c30d">
+                <ng-template let-row="row" ngx-datatable-cell-template>
+                    {{ row.c30d }}
+                </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column name="Msgs 72hrs" [flexGrow]="1" prop="m72">
+                <ng-template let-row="row" ngx-datatable-cell-template>
+                    {{ row.m72 }}
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Msgs 30days" [flexGrow]="1" prop="m30d">
+                <ng-template let-row="row" ngx-datatable-cell-template>
+                    {{ row.m30d }}
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Task" [flexGrow]="1" prop="taskCnt">
+                <ng-template let-row="row" ngx-datatable-cell-template>
+                    {{ row.taskCnt }}
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Date" [flexGrow]="1" prop="registration_date">
+                <ng-template let-row="row" ngx-datatable-cell-template>
+                    {{row.registration_date*1000 |date}}
+                </ng-template>
+            </ngx-datatable-column>
+
+
+        </ngx-datatable>
+    </mat-card-content>
+</mat-card>

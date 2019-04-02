@@ -1,0 +1,119 @@
+<div fxLayout="row" fxLayoutWrap="wrap">
+    <div fxLayout="column" fxFlex="100" fxFlex.gt-md="30">
+        <button (click)="openNewDialog()" mat-raised-button color="primary" class='margin-333'><mat-icon class="">send</mat-icon> Add Connector Campaign</button>
+        <mat-accordion class="margin-333 ">
+            <mat-expansion-panel class="mat-bg-accent">
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        <mat-icon>content_copy</mat-icon> Connector Campaign Templates ({{templates.length}})
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+
+                <div class="pl-1 pr-1 pb-1" *ngIf="templates.length>0">
+                    <mat-card class="user-card p-0" *ngFor="let item of templates">
+                        <mat-card-title class="bg-white">
+                            <div class="card-title-text">
+                                <a href="" routerLink="./setup/{{item.id}}" matTooltip="Connector Campaign" class="toolbar-avatar md mr-1">
+                                    <mat-icon class="" style='font-size: 50px;'>send</mat-icon>
+                                </a>
+                                <span>
+                        {{item.name}}</span>
+                                <span fxFlex></span>
+                                <button mat-icon-button [matMenuTriggerFor]="userMenu" class="">
+              <mat-icon class="">more_vert</mat-icon>
+          </button>
+                                <mat-menu #userMenu="matMenu">
+                                    <button mat-menu-item (click)="duplicateTemplate(item.id)">Add as Campaign</button>
+                                    <button mat-menu-item (click)="editTemplate(item.id)">Edit</button>
+                                    <button mat-menu-item (click)="deleteTemplate(item.id)">Delete</button>
+                                </mat-menu>
+                            </div>
+                            <mat-divider></mat-divider>
+                        </mat-card-title>
+
+                    </mat-card>
+                </div>
+            </mat-expansion-panel>
+        </mat-accordion>
+    </div>
+    <span fxFlex></span>
+    <div fxLayout="column" fxFlex="100" fxFlex.gt-md="70">
+        <mat-accordion class="ml-1 mr-1 ">
+            <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        Want to grow your network and find new leads? Start new Connector Campaign. </mat-panel-title>
+                </mat-expansion-panel-header>
+
+                <div class="pl-1 pr-1 pb-1">
+                    <ul>
+                        <li>
+                            <p>
+                                Set up steps with personalized automated messages for connection requests or a follow-up messages to be sent a few hours or days after connecting, set another automated follow-up messages if no response is received in a few days. This is done by clicking
+                                on the Messages tab inside the Connector Campaign. </p>
+                        </li>
+                        <li>
+                            <p>
+                                Search for new leads by keyword, location, industry, company, title. To start a new search, go to the Search page on the top menu, and click on 'Create New Search Task' button.</p>
+                        </li>
+                        <li>
+                            <p>
+                                After the search is completed select people you would like to be added to Connector Campaign(you can select all by click the top most checkbox) and click 'Add selected contacts to Connector Campaign'..
+                            </p>
+
+                        </li>
+                    </ul>
+                </div>
+            </mat-expansion-panel>
+        </mat-accordion>
+
+    </div>
+</div>
+<div fxLayout="row" fxLayoutWrap="wrap" class="mt-1">
+    <div fxLayout="column" fxFlex="100">
+        <div *ngFor="let item of res.errors" class="p-1 margin-333 pr-1 mat-bg-warn">
+            {{lang.trans(item)}}
+        </div>
+        <div *ngFor="let item of res.successes" class="p-1 margin-333 mat-bg-accent">
+            {{lang.trans(item)}}
+        </div>
+    </div>
+    <div fxLayout="column" *ngFor="let item of items" fxFlex="100" fxFlex.gt-md="25">
+        <mat-card class="user-card p-0">
+            <mat-card-title class="bg-white">
+                <div class="card-title-text">
+                    <a href="" routerLink="./setup/{{item.id}}" matTooltip="Connector Campaign" class="toolbar-avatar md mr-1">
+                        <mat-icon class="" style='font-size: 50px;'>send</mat-icon>
+                    </a>
+                    <span>
+                        {{item.name}}</span>
+                    <span fxFlex></span>
+                    <button mat-icon-button [matMenuTriggerFor]="userMenu" class="">
+              <mat-icon class="">more_vert</mat-icon>
+          </button>
+                    <mat-menu #userMenu="matMenu">
+                        <button mat-menu-item (click)="duplicate(item.id)">Duplicate</button>
+                        <button mat-menu-item (click)="edit(item.id)">Edit</button>
+                        <button mat-menu-item (click)="delete(item.id)">Delete</button>
+                        <button mat-menu-item (click)="saveAsTemplate(item.id)">Save as template</button>
+                    </mat-menu>
+                </div>
+                <mat-divider></mat-divider>
+            </mat-card-title>
+            <mat-card-content>
+                <p>
+                    <b> Status </b>: {{item.status}}
+                </p>
+                <p>
+                    <b> Contacts</b> : {{item.cconnection}}
+                </p>
+                <p>
+                    <b>Invites </b>: {{item.cinvites}}
+                </p>
+                <p>
+                    <b> Connected </b>: {{item.cconnected}}
+                </p>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>

@@ -1,0 +1,47 @@
+<div fxLayout="row" fxLayoutAlign="center center">
+    <div class="profile-width" fxFlex style="position:relative;    margin: 0 auto;">
+
+        <div fxLayout="row" fxLayoutWrap="wrap">
+            <div fxFlex="100" fxFlex.gt-sm="50" fxFlex.gt-md="300px">
+                <mat-card class="profile-sidebar mb-1 pb-0">
+                    <div class="propic text-center">
+                        <a [routerLink]="" (click)="goTo('picture')"> <img src="{{dataSvc.website}}/{{record.profile_pic}}" alt="">
+                        </a>
+                    </div>
+                    <div class="profile-title text-center mb-1">
+                        <div class="subtitle mb-05">
+                            {{record.user_name}}</div>
+                        <div class="text-muted">{{record.first_name + ' '+record.middle_name+' ' + record.last_name}}</div>
+
+                    </div>
+
+                    <div class="profile-nav">
+                        <mat-nav-list>
+                            <mat-list-item [routerLink]="routeUrlAccount" routerLinkActive="list-item-active">
+                                <mat-icon>recent_actors</mat-icon>Accounts
+                            </mat-list-item>
+
+
+
+                            <mat-divider></mat-divider>
+
+
+
+
+                            <mat-divider></mat-divider>
+                        </mat-nav-list>
+                    </div>
+                </mat-card>
+
+
+            </div>
+
+            <!-- Profile Views -->
+            <div fxFlex="100" fxFlex.gt-sm="50" fxFlex.gt-md="calc(100% - 300px)">
+
+                <router-outlet></router-outlet>
+            </div>
+        </div>
+
+    </div>
+</div>

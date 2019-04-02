@@ -1,0 +1,54 @@
+<mat-card class="p-0">
+    <mat-card-title>
+        <div class="card-title-text"><b>Payment Form</b></div>
+    </mat-card-title>
+    <mat-card-content class="p-1">
+        <div *ngIf="isLoading" class="m-1">
+            <mat-progress-bar mode="indeterminate" class="session-progress"></mat-progress-bar>
+        </div>
+
+        <div class="cell example example1">
+            <form #cartForm="ngForm" (ngSubmit)="stripeCheckout(cartForm,$event)" [formGroup]="stripeTest">
+
+                <fieldset>
+                    <div class="row">
+                        <label for="example1-name" data-tid="elements_examples.form.name_label">Name</label>
+                        <input id="example1-name" placeholder="Name" formControlName="name" matInput>
+                    </div>
+                </fieldset>
+                <fieldset>
+                    <div class="row">
+                        <div id="example1-card" class="field"></div>
+                    </div>
+                </fieldset>
+                <fieldset style="width:350px;background-color:#fff">
+                    <div class="row" style="width:400px">
+                        <label style="width: 100px;" for="example1-name" data-tid="elements_examples.form.name_label">Promo Code</label>
+                        <input maxlength="50" style="color: #222;width:170px" id="example1-name" placeholder="0000" matInput formControlName="affiliateCode">
+                        <a (click)="applyCode()" style="padding: 0px;" class="mat-primary mat-raised-button" mat-button="">&nbsp;&nbsp; Apply Code &nbsp;&nbsp;</a>
+                    </div>
+                </fieldset>
+                <div class="row">
+                    <mat-checkbox formControlName="agree" required></mat-checkbox>
+                    <span *ngIf="resCode.status==false ">
+                    I authorize monthly scheduled charges to my credit card for $220 and a one-time $349 set up fee.
+                    </span>
+                    <span *ngIf="resCode.status==true && resCode.data.freeTrial==false">
+                    I authorize monthly scheduled charges to my credit card for $220.
+                    <br>
+                    <small class="mat-color-accent text-sm">Your promo code was verified. Your setup fee is free.</small>
+                    </span>
+                    <span *ngIf="resCode.status==true && resCode.data.freeTrial==true">
+                            I accept the 14-day free trial and authorize monthly scheduled charges to my credit card for $220 thereafter, unless I give MyLinkedSolution at least a 24 hour cancellation notice prior to the expiration of the free trial.
+                    <br>
+                    <small class="mat-color-accent text-sm">Your promo code was verified, you're 14-day trial begins today and your setup fee is free.</small>
+                    </span>
+                </div>
+
+                <button style="margin-left: 15px;" mat-raised-button class="mt-1 mat-primary" type="submit" [disabled]="stripeTest.invalid">Submit</button>
+
+                <a (click)="back(2)" style="margin-left: 15px;" mat-raised-button class="mat-bg-accent mt-1 ">Back</a>
+            </form>
+        </div>
+    </mat-card-content>
+</mat-card>

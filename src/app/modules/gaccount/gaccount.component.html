@@ -1,0 +1,28 @@
+<mat-card class="p-0">
+    <mat-tab-group>
+        <mat-tab label="Account">
+            <mat-card-content class="mt-1" *ngIf="loaded">
+                <dynamic-form [formOpts]="formOptions" [submitText]="opts.buttonText" [fields]="formFieldsEdit" (formSubmit)="onSubmit('account',$event)">
+
+                </dynamic-form>
+            </mat-card-content>
+        </mat-tab>
+        <mat-tab label="Personal Info">
+            <mat-card-content class="mt-1" *ngIf="loaded">
+                <dynamic-form [formOpts]="formOptions" [submitText]="opts.buttonText" [fields]="formFieldsEditProfile" (formSubmit)="onSubmit('profile',$event)">
+
+                </dynamic-form>
+            </mat-card-content>
+        </mat-tab>
+        <mat-tab label="Password">
+            <mat-card-content class="mt-1" *ngIf="loaded">
+                <dynamic-form [formOpts]="formOptions" [submitText]="opts.buttonText" [fields]="formFieldsEditPass" (formSubmit)="onSubmit('password',$event)">
+
+                </dynamic-form>
+            </mat-card-content>
+        </mat-tab>
+
+
+
+    </mat-tab-group>
+</mat-card>

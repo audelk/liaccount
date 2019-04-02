@@ -1,0 +1,56 @@
+<div fxLayout="row" fxLayoutAlign="center center" class="mt-1">
+    <div fxLayout="column" fxFlex="100" fxFlex.gt-md="50">
+
+        <mat-card class="p-0">
+            <mat-card-title>
+                <div class="card-title-text"><b>{{showStripeForm==false?"Payment Method":"Update Payment Method"}}</b> {{ prospectRes.data.first_name + " " +prospectRes.data.last_name}}</div>
+            </mat-card-title>
+            <mat-card-content class="p-1">
+                <div class="text-center pb-1">
+                    <img style='max-width:300px' src="assets/images/logo-full.png" alt="" class="mb-05">
+
+                </div>
+                <div class="mat-color-warn p-1 margin-333 pr-1">This url will expired on {{expDate | date:'medium'}}</div>
+
+                <div *ngIf="!decodedTokenData" class="p-1 margin-333 pr-1 mat-bg-warn">
+                    Invalid Token
+                </div>
+
+                <div *ngIf="decodedTokenData">
+                    <div *ngIf="isLoading" class="m-1">
+                        <mat-progress-bar mode="indeterminate" class="session-progress"></mat-progress-bar>
+                    </div>
+                    <div class="cell example example1" *ngIf="!showStripeForm">
+                        <fieldset>
+                            <div class="row">
+                                <label for="example1-name" data-tid="elements_examples.form.name_label">{{methodData.brand}}</label>
+                                <input disabled="true" id="example1-name" type="text" placeholder="Card" value="{{methodData.last4}}">
+                            </div>
+                        </fieldset>
+                        <button (click)="edit()" style="margin-left: 15px;" mat-raised-button class="mat-bg-primary" type="submit">Edit</button>
+                    </div>
+                    <div class="cell example example1" [hidden]="!showStripeForm">
+                        <form novalidate (ngSubmit)="stripeCheckout($event)" [formGroup]="stripeTest">
+
+                            <fieldset>
+                                <div class="row">
+                                    <label for="example1-name" data-tid="elements_examples.form.name_label">Name</label>
+                                    <input id="example1-name" type="text" placeholder="Name" formControlName="name">
+                                </div>
+                            </fieldset>
+                            <fieldset>
+                                <div class="row">
+                                    <div id="example1-card" class="field"></div>
+                                </div>
+                            </fieldset>
+
+                            <button style="margin-left: 15px;" mat-raised-button class="mat-bg-primary" type="submit">Save</button>
+                            <button (click)="showStripeForm=false" style="margin-left: 15px;" mat-raised-button class="mat-bg-accent" type="submit">Close</button>
+                        </form>
+                    </div>
+                </div>
+            </mat-card-content>
+        </mat-card>
+
+    </div>
+</div>

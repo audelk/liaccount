@@ -1,0 +1,28 @@
+<div fxLayout="row" fxLayoutAlign="center center">
+    <div fxLayout="column" fxFlex="100" fxFlex.gt-md="50">
+        <mat-card class="p-0">
+            <mat-card-title class="mat-bg-primary m-0">
+                <div class="card-title-text">
+                    <span>CPL Consumer Licensing Agreement</span>
+                    <span fxFlex></span>
+
+                </div>
+                <mat-divider></mat-divider>
+            </mat-card-title>
+
+            <mat-card-content>
+                <div [innerHTML]="TOSText" class="p-1 m-1" style=";overflow-y:scroll;max-height:500px">
+
+
+                </div>
+                <button mat-raised-button class="mat-primary  mb-1 mt-1" (click)='iagree()'>I have read and agree to the terms of service</button>
+
+                <button mat-raised-button class="  mb-1 mt-1" (click)='logout()'>Logout</button>
+
+
+            </mat-card-content>
+
+        </mat-card>
+
+    </div>
+</div>
